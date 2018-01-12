@@ -33,7 +33,10 @@ namespace snow_bc_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            //services.AddMvc();
+            services.AddMvc()
+            .AddJsonOptions(a => a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver())
+            .AddXmlDataContractSerializerFormatters();
 
             // Automapper Configuration
             AutoMapperConfiguration.Configure();
@@ -43,7 +46,11 @@ namespace snow_bc_api
 
             services.AddScoped<IEntityMapper, BcApiEntityMapper>();
             services.AddScoped<ICountryRepository, CountryRepository>();
-         
+            services.AddScoped<ICityRepository, CityRepository>();
+
+            services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddOptions();
+            services.AddSingleton<IConfiguration>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

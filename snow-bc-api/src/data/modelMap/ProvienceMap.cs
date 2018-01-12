@@ -18,6 +18,7 @@ namespace snow_bc_api.src.data
             entity.HasKey(p => new { p.Id });
 
             entity.Property(p => p.Id).UseSqlServerIdentityColumn();
+
             entity.HasOne(a => a.Country).WithMany(s => s.AllProviences).HasForeignKey(a => a.CountryId);
         }
     }

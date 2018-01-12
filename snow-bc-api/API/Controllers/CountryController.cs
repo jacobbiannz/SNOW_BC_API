@@ -50,7 +50,7 @@ namespace snow_bc_api.API.Controllers
 
             IEnumerable<Country> _countries = _countryRepository
                //.AllIncluding(s => s.Company, s => s.AllProducts)
-                .AllIncluding()
+                .AllIncluding(s=>s.AllProviences)
                 .OrderBy(s => s.Id)
                 .Skip((currentPage - 1) * currentPageSize)
                 .Take(currentPageSize)

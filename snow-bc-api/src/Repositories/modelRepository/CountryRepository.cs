@@ -11,11 +11,11 @@ namespace snow_bc_api.src.Repositories
     public class CountryRepository : EntityRepository<Country>, ICountryRepository
     {
         
-        private BcApiDbContext _context;
+        //private BcApiDbContext _context;
 
         public CountryRepository(BcApiDbContext dbContext) : base(dbContext)
         {
-            _context = dbContext;
+         //   _context = dbContext;
         }
         /*
         public override async Task<Country> AddAsync(Country entity)
