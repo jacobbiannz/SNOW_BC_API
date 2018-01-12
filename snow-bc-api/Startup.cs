@@ -4,10 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System.Net;
+
+//using Swashbuckle.AspNetCore.Swagger;
+using snow_bc_api.src.data;
+using snow_bc_api.src.Repositories;
+using snow_bc_api.API.ApiModel.Mapping;
 
 namespace snow_bc_api
 {
@@ -24,10 +34,20 @@ namespace snow_bc_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            // Automapper Configuration
+            AutoMapperConfiguration.Configure();
+
+            services.AddEntityFrameworkSqlServer().AddDbContext<BcApiDbContext>();
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
+            services.AddScoped<IEntityMapper, BcApiEntityMapper>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
+         
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, BcApiDbContext context)
         {
             if (env.IsDevelopment())
             {
@@ -35,6 +55,12 @@ namespace snow_bc_api
             }
 
             app.UseMvc();
+
+
+
+
+
+            DbInitializer.Initialize(context);
         }
     }
 }

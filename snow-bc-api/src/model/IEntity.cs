@@ -8,6 +8,7 @@ namespace snow_bc_api.src.model
     public interface IEntity
     {
         int Id { get; set; }
+
         DateTime? CreatedDate { get; set; }
 
         string CreatedBy { get; set; }
