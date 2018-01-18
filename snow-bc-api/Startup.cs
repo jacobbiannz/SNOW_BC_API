@@ -67,7 +67,7 @@ namespace snow_bc_api
 
 
 
-            DbInitializer.Initialize(context);
+          //  DbInitializer.Initialize(context);
         }
     }
 }
