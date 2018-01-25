@@ -4,18 +4,33 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using snow_bc_api.src.Repositories;
+using snow_bc_api.src.data;
+using AutoMapper;
+using snow_bc_api.API.ApiModel;
 
 namespace snow_bc_api.API.Controllers
 {
-    
-    [Route("api/[controller]")]
+
+    [Route("api/cities")]
     public class CityController : Controller
     {
+        private ILogger<CityController> _logger;
+        private ICityRepository _cityRepository;
+        public CityController(ICityRepository cityRepository, ILogger<CityController> logger)
+        {
+            _logger = logger;
+            _cityRepository = cityRepository;
+        }
+
         // GET: api/City
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult GetCities()
         {
-            return new string[] { "value1", "value2" };
+            var cityEntities = _cityRepository.GetAll();
+            var results = Mapper.Map<IEnumerable<CityApiModel>>(cityEntities);
+            return Ok(results);
         }
 
         // GET: api/City/5

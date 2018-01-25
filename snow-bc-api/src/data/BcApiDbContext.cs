@@ -17,11 +17,12 @@ namespace snow_bc_api.src.data
 
         public String ConnectionString { get; }
         public IEntityMapper EntityMapper { get; }
-
+     
         public BcApiDbContext(IOptions<AppSettings> appSettings, IEntityMapper entityMapper)
         {
             ConnectionString = appSettings.Value.ConnectionString;
             EntityMapper = entityMapper;
+            Database.Migrate();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

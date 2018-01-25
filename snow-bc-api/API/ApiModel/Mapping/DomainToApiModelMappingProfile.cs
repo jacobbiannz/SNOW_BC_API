@@ -22,6 +22,8 @@ namespace snow_bc_api.API.ApiModel.Mapping
                 .ForMember(am => am.AllProvices, 
                     s => s.ResolveUsing(src => ConvertProviences(src.AllProviences)));
 
+            CreateMap<City, CityApiModel>()
+              ;
             /*
             CreateMap<Category, CategoryViewModel>()
              .ForMember(vm => vm.Name,

@@ -13,8 +13,6 @@ using Newtonsoft.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Net;
-
-//using Swashbuckle.AspNetCore.Swagger;
 using snow_bc_api.src.data;
 using snow_bc_api.src.Repositories;
 using snow_bc_api.API.ApiModel.Mapping;
@@ -33,10 +31,11 @@ namespace snow_bc_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddMvc();
             services.AddMvc()
+            
             .AddJsonOptions(a => a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver())
-            .AddXmlDataContractSerializerFormatters();
+            
+           .AddXmlDataContractSerializerFormatters();
 
             // Automapper Configuration
             AutoMapperConfiguration.Configure();
@@ -47,8 +46,7 @@ namespace snow_bc_api
             services.AddScoped<IEntityMapper, BcApiEntityMapper>();
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ICityRepository, CityRepository>();
-
-            services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<IProvienceRepository, ProvienceRepository>();
             services.AddOptions();
             services.AddSingleton<IConfiguration>(Configuration);
         }
@@ -56,11 +54,19 @@ namespace snow_bc_api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, BcApiDbContext context)
         {
+            loggerFactory.AddDebug();
+
+            app.UseStatusCodePages();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            else
+            {
+                app.UseExceptionHandler();
+            }
+            
             app.UseMvc();
 
 
