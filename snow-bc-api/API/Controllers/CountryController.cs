@@ -16,13 +16,13 @@ using AutoMapper;
 
 namespace snow_bc_api.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Countries")]
     public class CountryController : Controller
     {
-        int page = 1;
-        int pageSize = 100;
+        public int Page = 1;
+        public int PageSize = 100;
 
-        private ICountryRepository _countryRepository;
+        private readonly ICountryRepository _countryRepository;
 
         public CountryController(ICountryRepository repository)
         {
@@ -30,7 +30,6 @@ namespace snow_bc_api.API.Controllers
         }
 
         [HttpGet]
-        [Route("Countries")]
         public IActionResult GetCountries()
         {
             var pagination = Request.Headers["Pagination"];
@@ -38,31 +37,30 @@ namespace snow_bc_api.API.Controllers
             if (!string.IsNullOrEmpty(pagination))
             {
                 string[] vals = pagination.ToString().Split(',');
-                int.TryParse(vals[0], out page);
-                int.TryParse(vals[1], out pageSize);
+                int.TryParse(vals[0], out Page);
+                int.TryParse(vals[1], out PageSize);
             }
 
-            int currentPage = page;
-            int currentPageSize = pageSize;
+            int currentPage = Page;
+            int currentPageSize = PageSize;
             var totalCountries = _countryRepository.Count();
-            var totalPages = (int)Math.Ceiling((double)totalCountries / pageSize);
+            var totalPages = (int)Math.Ceiling((double)totalCountries / PageSize);
 
 
-            IEnumerable<Country> _countries = _countryRepository
-               //.AllIncluding(s => s.Company, s => s.AllProducts)
-                .AllIncluding(s=>s.AllProviences)
+            IEnumerable<Country> countries = _countryRepository
+                //.AllIncluding(s => s.Company, s => s.AllProducts)
+                .AllIncluding(s => s.AllProviences)
                 .OrderBy(s => s.Id)
                 .Skip((currentPage - 1) * currentPageSize)
                 .Take(currentPageSize)
                 .ToList();
 
-            Response.AddPagination(page, pageSize, totalCountries, totalPages);
+            Response.AddPagination(Page, PageSize, totalCountries, totalPages);
 
-            var response = new ListModelResponse<CountryApiModel>() as IListModelResponse<CountryApiModel>;
 
-            IEnumerable<CountryApiModel> _CountriesAM = Mapper.Map<IEnumerable<Country>, IEnumerable<CountryApiModel>>(_countries);
+            IEnumerable<CountryApiModel> countriesAm = Mapper.Map<IEnumerable<Country>, IEnumerable<CountryApiModel>>(countries);
 
-            return new OkObjectResult(_CountriesAM);
+            return new OkObjectResult(countriesAm);
         }
 
         /*
@@ -80,19 +78,19 @@ namespace snow_bc_api.API.Controllers
         {
             return "value";
         }
-        
+
         // POST: api/abc
         [HttpPost]
         public void Post([FromBody]string value)
         {
         }
-        
+
         // PUT: api/abc/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
-        
+
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)

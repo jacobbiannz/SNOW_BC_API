@@ -2,20 +2,60 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using snow_bc_api.API.ApiModel;
+using snow_bc_api.API.Core;
+using snow_bc_api.src.model;
+using snow_bc_api.src.Repositories;
 
 namespace snow_bc_api.API.Controllers
 {
-     
-    [Route("api/[controller]")]
+
+    [Route("api/proviences")]
     public class ProvienceController : Controller
     {
+        public int Page = 1;
+        public int PageSize = 100;
+
+        private readonly IProvienceRepository _provienceRepository;
         // GET: api/abc
-        [HttpGet]
-        public IEnumerable<string> Get()
+        public ProvienceController(IProvienceRepository repository)
         {
-            return new string[] { "value1", "value2" };
+            _provienceRepository = repository;
+        }
+        [HttpGet]
+        public ActionResult GetProviences()
+        {
+            var pagination = Request.Headers["Pagination"];
+
+            if (!string.IsNullOrEmpty(pagination))
+            {
+                string[] vals = pagination.ToString().Split(',');
+                int.TryParse(vals[0], out Page);
+                int.TryParse(vals[1], out PageSize);
+            }
+
+            int currentPage = Page;
+            int currentPageSize = PageSize;
+            var totalProviences = _provienceRepository.Count();
+            var totalPages = (int)Math.Ceiling((double)totalProviences / PageSize);
+
+
+            IEnumerable<Provience> proviences = _provienceRepository
+                .AllIncluding(s => s.AllCities)
+                .OrderBy(s => s.Id)
+                .Skip((currentPage - 1) * currentPageSize)
+                .Take(currentPageSize)
+                .ToList();
+
+            Response.AddPagination(Page, PageSize, totalProviences, totalPages);
+
+
+            var results = Mapper.Map<IEnumerable<ProvienceApiModel>>(proviences);
+
+            return Ok(results);
         }
 
         // GET: api/abc/5
