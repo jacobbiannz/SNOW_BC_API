@@ -17,7 +17,7 @@ namespace snow_bc_api.src.model
        
         public Country Country { get; set; }
 
-        public int CountryId { get; set; }
+        public Guid CountryId { get; set; }
 
         public ICollection<City> AllCities { get; set; } = new List<City>();
 

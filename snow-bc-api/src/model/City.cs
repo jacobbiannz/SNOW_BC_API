@@ -16,7 +16,7 @@ namespace snow_bc_api.src.model
         [ForeignKey("ProvienceId")]
         public Provience Provience { get; set; }
 
-        public int ProvienceId { get; set; }
+        public Guid ProvienceId { get; set; }
        
 
     }

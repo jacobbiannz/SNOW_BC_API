@@ -16,7 +16,7 @@ using AutoMapper;
 
 namespace snow_bc_api.API.Controllers
 {
-    [Route("api/Countries")]
+    [Route("api/countries")]
     public class CountryController : Controller
     {
         public int Page = 1;
@@ -48,7 +48,6 @@ namespace snow_bc_api.API.Controllers
 
 
             IEnumerable<Country> countries = _countryRepository
-                //.AllIncluding(s => s.Company, s => s.AllProducts)
                 .AllIncluding(s => s.AllProviences)
                 .OrderBy(s => s.Id)
                 .Skip((currentPage - 1) * currentPageSize)
@@ -58,9 +57,9 @@ namespace snow_bc_api.API.Controllers
             Response.AddPagination(Page, PageSize, totalCountries, totalPages);
 
 
-            IEnumerable<CountryApiModel> countriesAm = Mapper.Map<IEnumerable<Country>, IEnumerable<CountryApiModel>>(countries);
+            IEnumerable<CountryApiModel> countriesAm = Mapper.Map<IEnumerable<CountryApiModel>>(countries);
 
-            return new OkObjectResult(countriesAm);
+            return Ok(countriesAm);
         }
 
         /*
@@ -74,9 +73,17 @@ namespace snow_bc_api.API.Controllers
         */
         // GET: api/abc/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult GetCountry(Guid id)
         {
-            return "value";
+            var countryFromRepo = _countryRepository.GetSingleAsync(id);
+
+            if (countryFromRepo==null)
+            {
+                return NotFound();
+            }
+
+            var country = Mapper.Map<CountryApiModel>(countryFromRepo.Result);
+            return new JsonResult(country);
         }
 
         // POST: api/abc

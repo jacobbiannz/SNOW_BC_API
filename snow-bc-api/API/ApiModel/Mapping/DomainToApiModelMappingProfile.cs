@@ -83,12 +83,12 @@ namespace snow_bc_api.API.ApiModel.Mapping
             return cities;
         }
 
-        private object ConvertProvience(int provienceId)
+        private object ConvertProvience(Guid provienceId)
         {
             return new KeyValuePair<string, string>("ProvienceId", provienceId.ToString());
         }
 
-        private object ConvertCountry(int countryId)
+        private object ConvertCountry(Guid countryId)
         {
             return new KeyValuePair<string, string>("CountryId", countryId.ToString());
         }

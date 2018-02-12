@@ -40,9 +40,10 @@ namespace snow_bc_api.src.Repositories
             return query.AsEnumerable();
         }
 
-        public Task<T> GetSingleAsync(int id)
+        public Task<T> GetSingleAsync(Guid id)
         {
             return _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
+            
         }
 
         public Task<T> GetSingleAsync(Expression<Func<T, bool>> predicate)
@@ -98,6 +99,11 @@ namespace snow_bc_api.src.Repositories
                 _context.Entry<T>(entity).State = EntityState.Deleted;
             }
             return await CommitAsync();
+        }
+
+        public bool EntityExists(Guid id)
+        {
+            return _context.Set<T>().Any(a => a.Id == id);
         }
 
         public virtual Task<int> CommitAsync()

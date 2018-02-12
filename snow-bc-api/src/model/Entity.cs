@@ -11,7 +11,7 @@ namespace snow_bc_api.src.model
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public DateTime? CreatedDate { get; set; }
 
         public string CreatedBy { get; set; }
