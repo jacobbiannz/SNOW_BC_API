@@ -43,7 +43,6 @@ namespace snow_bc_api.src.Repositories
         public Task<T> GetSingleAsync(Guid id)
         {
             return _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
-            
         }
 
         public Task<T> GetSingleAsync(Expression<Func<T, bool>> predicate)
@@ -69,7 +68,8 @@ namespace snow_bc_api.src.Repositories
 
         public virtual async Task<T> AddAsync(T entity)
         {
-            EntityEntry dbEntityEntry = _context.Entry<T>(entity);
+            // EntityEntry dbEntityEntry = _context.Entry<T>(entity);
+            entity.CreatedDate = DateTime.UtcNow;
             _context.Set<T>().Add(entity);
             await CommitAsync();
             return entity;
@@ -109,6 +109,11 @@ namespace snow_bc_api.src.Repositories
         public virtual Task<int> CommitAsync()
         {
             return _context.SaveChangesAsync();
+        }
+
+        public bool Completed()
+        {
+            return CommitAsync().Result >= 0;
         }
     }
 }

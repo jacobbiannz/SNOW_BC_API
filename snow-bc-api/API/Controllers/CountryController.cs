@@ -72,24 +72,39 @@ namespace snow_bc_api.API.Controllers
         }
         */
         // GET: api/abc/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetCountry")]
         public IActionResult GetCountry(Guid id)
         {
-            var countryFromRepo = _countryRepository.GetSingleAsync(id);
+            var countryFromRepo =  _countryRepository.GetSingleAsync(id);
 
-            if (countryFromRepo==null)
+            if (countryFromRepo == null)
             {
                 return NotFound();
             }
 
             var country = Mapper.Map<CountryApiModel>(countryFromRepo.Result);
-            return new JsonResult(country);
+            return Ok(country);
         }
 
         // POST: api/abc
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult CreateCountry([FromBody]CountryApiModelForCreation country)
         {
+            if (country == null)
+            {
+                return BadRequest();
+            }
+
+            var countryEntity = Mapper.Map<Country>(country);
+            _countryRepository.AddAsync(countryEntity);
+
+            if (!_countryRepository.Completed())
+            {
+                throw new Exception("Creating an country failed on save.");
+            }
+            var countryToReturn = Mapper.Map<CountryApiModel>(countryEntity);
+
+            return CreatedAtRoute("GetCountry", new { id = countryToReturn.Id }, countryToReturn);
         }
 
         // PUT: api/abc/5

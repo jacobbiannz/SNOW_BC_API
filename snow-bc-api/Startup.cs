@@ -16,6 +16,7 @@ using System.Net;
 using snow_bc_api.src.data;
 using snow_bc_api.src.Repositories;
 using snow_bc_api.API.ApiModel.Mapping;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace snow_bc_api
 {
@@ -31,9 +32,12 @@ namespace snow_bc_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc()
-            
-            .AddJsonOptions(a => a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver())
+            services.AddMvc(setupAction =>
+            {
+                setupAction.ReturnHttpNotAcceptable = true;
+                setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+            })
+           .AddJsonOptions(a => a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver())
             
            .AddXmlDataContractSerializerFormatters();
 
@@ -64,7 +68,14 @@ namespace snow_bc_api
             }
             else
             {
-                app.UseExceptionHandler();
+                app.UseExceptionHandler(appBuilder =>
+                {
+                    appBuilder.Run(async cont =>
+                    {
+                        cont.Response.StatusCode = 500;
+                        await cont.Response.WriteAsync("An unexpected fault happened. Try again later.");
+                    });
+                });
             }
             
             app.UseMvc();

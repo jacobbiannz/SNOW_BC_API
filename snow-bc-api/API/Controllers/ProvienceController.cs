@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -13,62 +14,75 @@ using snow_bc_api.src.Repositories;
 namespace snow_bc_api.API.Controllers
 {
 
-    [Route("api/proviences")]
+    [Route("api/countries/{countryId}/proviences")]
     public class ProvienceController : Controller
     {
         public int Page = 1;
         public int PageSize = 100;
 
-        private readonly IProvienceRepository _provienceRepository;
+        private readonly ICountryRepository _countryRepository;
         // GET: api/abc
-        public ProvienceController(IProvienceRepository repository)
+        public ProvienceController(ICountryRepository repository)
         {
-            _provienceRepository = repository;
+            _countryRepository = repository;
         }
-        [HttpGet]
-        public ActionResult GetProviences()
+        [HttpGet()]
+        public IActionResult GetProviencesForCountry(Guid countryId)
         {
-            var pagination = Request.Headers["Pagination"];
 
-            if (!string.IsNullOrEmpty(pagination))
+            if (!_countryRepository.EntityExists(countryId))
             {
-                string[] vals = pagination.ToString().Split(',');
-                int.TryParse(vals[0], out Page);
-                int.TryParse(vals[1], out PageSize);
+                return NotFound();
             }
 
-            int currentPage = Page;
-            int currentPageSize = PageSize;
-            var totalProviences = _provienceRepository.Count();
-            var totalPages = (int)Math.Ceiling((double)totalProviences / PageSize);
-
-
-            IEnumerable<Provience> proviences = _provienceRepository
-                .AllIncluding(s => s.AllCities)
-                .OrderBy(s => s.Id)
-                .Skip((currentPage - 1) * currentPageSize)
-                .Take(currentPageSize)
-                .ToList();
-
-            Response.AddPagination(Page, PageSize, totalProviences, totalPages);
-
-
-            var results = Mapper.Map<IEnumerable<ProvienceApiModel>>(proviences);
+            var proviencesForCountryFromRepo = _countryRepository.GetProviencesForCountry(countryId);
+            var results = Mapper.Map<IEnumerable<ProvienceApiModel>>(proviencesForCountryFromRepo);
 
             return Ok(results);
         }
 
         // GET: api/abc/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{provienceId}", Name = "GetProvienceForCountry")]
+        public IActionResult GetProvienceForCountry(Guid countryId, Guid provienceId)
         {
-            return "value";
+            if (!_countryRepository.EntityExists(countryId))
+            {
+                return NotFound();
+            }
+
+            var provienceForCountryFromRepo = _countryRepository.GetProvienceForCountry(countryId, provienceId);
+
+            var results = Mapper.Map<ProvienceApiModel>(provienceForCountryFromRepo);
+
+            return Ok(results);
         }
 
         // POST: api/abc
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult CreateProvienceForCountry(Guid countryId, [FromBody]ProvienceApiModelForCreation provience)
         {
+            if (provience == null)
+            {
+                return BadRequest();
+            }
+            if (!_countryRepository.EntityExists(countryId))
+            {
+                return NotFound();
+            }
+
+            var provienceEntity = Mapper.Map<Provience>(provience);
+
+            _countryRepository.AddProvienceForCountry(countryId, provienceEntity);
+
+            if (!_countryRepository.Completed())
+            {
+                throw new Exception($"Creating a provience for country {countryId} failed on save.");
+            }
+
+            var provienceForReturn = Mapper.Map<ProvienceApiModel>(provienceEntity);
+
+            return CreatedAtRoute("GetProvienceForCountry", 
+                new { countryId = countryId, provienceId = provienceForReturn.Id}, provienceForReturn);
         }
 
         // PUT: api/abc/5
