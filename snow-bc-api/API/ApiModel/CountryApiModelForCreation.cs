@@ -5,12 +5,9 @@ using System.Threading.Tasks;
 
 namespace snow_bc_api.API.ApiModel
 {
-    public class CityApiModel
+    public class CountryApiModelForCreation
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
-
-        public KeyValuePair<String, String> ProvienceInfo { get; set; }
-
+        public ICollection<ProvienceApiModelForCreation> Proviences { get; set; } = new List<ProvienceApiModelForCreation>();
     }
 }

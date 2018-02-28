@@ -14,7 +14,6 @@ namespace snow_bc_api.src.Repositories
     where T : class, IEntity, new()
     {
         private BcApiDbContext _context;
-
         #region Properties
         public EntityRepository(BcApiDbContext context)
         {
@@ -40,7 +39,7 @@ namespace snow_bc_api.src.Repositories
             return query.AsEnumerable();
         }
 
-        public Task<T> GetSingleAsync(int id)
+        public Task<T> GetSingleAsync(Guid id)
         {
             return _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
         }
@@ -68,7 +67,9 @@ namespace snow_bc_api.src.Repositories
 
         public virtual async Task<T> AddAsync(T entity)
         {
-            EntityEntry dbEntityEntry = _context.Entry<T>(entity);
+            // EntityEntry dbEntityEntry = _context.Entry<T>(entity);
+            entity.CreatedDate = DateTime.UtcNow;
+            entity.CreatedBy = "admin";
             _context.Set<T>().Add(entity);
             await CommitAsync();
             return entity;
@@ -84,7 +85,10 @@ namespace snow_bc_api.src.Repositories
         public virtual async Task<T> DeleteAsync(T entity)
         {
             EntityEntry dbEntityEntry = _context.Entry<T>(entity);
-            dbEntityEntry.State = EntityState.Deleted;
+           //     dbEntityEntry.State = EntityState.Deleted;
+            dbEntityEntry.State = EntityState.Modified;
+            entity.DeleteDate = DateTime.UtcNow;
+            entity.DeletedBy = "admin";
             await CommitAsync();
             return entity;
         }
@@ -100,9 +104,15 @@ namespace snow_bc_api.src.Repositories
             return await CommitAsync();
         }
 
+        public bool EntityExists(Guid id)
+        {
+            return _context.Set<T>().Any(a => a.Id == id);
+        }
+
         public virtual Task<int> CommitAsync()
         {
-            return _context.SaveChangesAsync();
+           return _context.SaveChangesAsync();
+          
         }
     }
 }

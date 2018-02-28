@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using snow_bc_api.src.data;
 using Microsoft.Extensions.DependencyInjection;
+using NLog.Web;
+using NLog;
 
 namespace snow_bc_api
 {
@@ -16,22 +18,37 @@ namespace snow_bc_api
     {
         public static void Main(string[] args)
         {
-            // BuildWebHost(args).Run();
-            var host = BuildWebHost(args);
-            using (var scope = host.Services.CreateScope())
+            var logger = LogManager.LoadConfiguration("nlog.config").GetCurrentClassLogger();
+            try
             {
-                // Retrieve your DbContext isntance here
-                var dbContext = scope.ServiceProvider.GetService<BcApiDbContext>();
+                var host = BuildWebHost(args);
+                using (var scope = host.Services.CreateScope())
+                {
+                    // Retrieve your DbContext isntance here
+                    var dbContext = scope.ServiceProvider.GetService<BcApiDbContext>();
 
-                // place your DB seeding code here
-                DbInitializer.Initialize(dbContext);
+                    // place your DB seeding code here
+                    DbInitializer.Initialize(dbContext);
+                }
+                host.Run();
             }
-            host.Run();
+            catch (Exception ex)
+            {
+                //NLog: catch setup errors
+                logger.Error(ex, "Stopped program because of exception");
+                throw;
+            }
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                 .ConfigureLogging(logging =>
+                 {
+                     logging.ClearProviders();
+                     logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                 })
+                .UseNLog()
                 .Build();
     }
 }

@@ -15,9 +15,9 @@ namespace snow_bc_api.src.data
 
             entity.ToTable("City", "Production");
 
-            entity.HasKey(p => new { p.Id });
+        //    entity.HasKey(p => new { p.Id });
 
-            entity.Property(p => p.Id).UseSqlServerIdentityColumn();
+         //   entity.Property(p => p.Id).UseSqlServerIdentityColumn();
             entity.HasOne(a => a.Provience).WithMany(s => s.AllCities).HasForeignKey(a => a.ProvienceId);
         }
     }

@@ -11,92 +11,198 @@ using snow_bc_api.API.Response;
 using snow_bc_api.API.Core;
 using snow_bc_api.API.ApiModel;
 using AutoMapper;
+using snow_bc_api.src.Helpers;
+
 //using snow_bc_api.API.ApiModel.ApiModelMap;
 
 
 namespace snow_bc_api.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/countries")]
     public class CountryController : Controller
     {
-        int page = 1;
-        int pageSize = 100;
+        public int Page = 1;
+        
 
-        private ICountryRepository _countryRepository;
-
-        public CountryController(ICountryRepository repository)
+        private readonly ICountryRepository _countryRepository;
+        private readonly IProvienceRepository _provienceRepository;
+        private readonly IUrlHelper _urlHelper;
+        private readonly IPropertyMappingService _propertyMappingService;
+        private readonly ITypeHelperService _typeHelperService;
+        public CountryController(ICountryRepository countryRepository, IProvienceRepository provienceRepository, 
+            IUrlHelper urlHelper, IPropertyMappingService propertyMappingService, ITypeHelperService typeHelperService)
         {
-            _countryRepository = repository;
+            _countryRepository = countryRepository;
+            _provienceRepository = provienceRepository;
+            _urlHelper = urlHelper;
+            _propertyMappingService = propertyMappingService;
+            _typeHelperService = typeHelperService;
         }
 
-        [HttpGet]
-        [Route("Countries")]
-        public IActionResult GetCountries()
+        [HttpGet(Name = "GetCountries")]
+        [HttpHead]
+        public IActionResult GetCountries(CountryResourceParameters countryResourceParameters)
         {
-            var pagination = Request.Headers["Pagination"];
-
-            if (!string.IsNullOrEmpty(pagination))
+            if (!_propertyMappingService.ValidMappingExistsFor<CountryApiModel, Country>(countryResourceParameters.OrderBy))
             {
-                string[] vals = pagination.ToString().Split(',');
-                int.TryParse(vals[0], out page);
-                int.TryParse(vals[1], out pageSize);
+                return BadRequest();
             }
 
-            int currentPage = page;
-            int currentPageSize = pageSize;
-            var totalCountries = _countryRepository.Count();
-            var totalPages = (int)Math.Ceiling((double)totalCountries / pageSize);
+            if (!_typeHelperService.TypeHasProperties<CountryApiModel>(countryResourceParameters.Fields))
+            {
+                return BadRequest();
+            }
+
+            var countriesFromRepo = _countryRepository.GetCountries(countryResourceParameters);
+
+            var previousPageLink = countriesFromRepo.HasPrevious
+                ? CreateCountriesResourceUri(countryResourceParameters, ResourceUriType.PreviousPage)
+                : null;
+
+            var nextPageLink = countriesFromRepo.HasNext
+                ? CreateCountriesResourceUri(countryResourceParameters, ResourceUriType.NextPage)
+                : null;
+
+            var paginationMetadata = new
+            {
+                totalCount = countriesFromRepo.TotalCount,
+                pageSize = countriesFromRepo.PageSize,
+                currentPage = countriesFromRepo.CurrentPage,
+                totalPages = countriesFromRepo.TotalPages,
+                previousPageLink = previousPageLink,
+                nextPageLink = nextPageLink
+            };
+
+            Response.Headers.Add("X-Pagination", Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
 
 
-            IEnumerable<Country> _countries = _countryRepository
-               //.AllIncluding(s => s.Company, s => s.AllProducts)
-                .AllIncluding(s=>s.AllProviences)
-                .OrderBy(s => s.Id)
-                .Skip((currentPage - 1) * currentPageSize)
-                .Take(currentPageSize)
-                .ToList();
+            var countries = Mapper.Map<IEnumerable<CountryApiModel>>(countriesFromRepo);
 
-            Response.AddPagination(page, pageSize, totalCountries, totalPages);
-
-            var response = new ListModelResponse<CountryApiModel>() as IListModelResponse<CountryApiModel>;
-
-            IEnumerable<CountryApiModel> _CountriesAM = Mapper.Map<IEnumerable<Country>, IEnumerable<CountryApiModel>>(_countries);
-
-            return new OkObjectResult(_CountriesAM);
+            return Ok(countries.ShapeData(countryResourceParameters.Fields));
         }
 
-        /*
-        //---------------------------------------
-        // GET: api/abc
-        [HttpGet]
-        public IEnumerable<string> Get()
+      
+        [HttpGet("{id}", Name = "GetCountry")]
+        public IActionResult GetCountry(Guid id, [FromQuery] string fields)
         {
-            return new string[] { "value1", "value2" };
+            if (!_typeHelperService.TypeHasProperties<CountryApiModel>(fields))
+            {
+                return BadRequest();
+            }
+            var countryFromRepo =  _countryRepository.GetSingleAsync(id);
+
+            if (countryFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            var country = Mapper.Map<CountryApiModel>(countryFromRepo.Result);
+            return Ok(country.ShapeData(fields));
         }
-        */
-        // GET: api/abc/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-        
+
         // POST: api/abc
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult CreateCountry([FromBody]CountryApiModelForCreation country)
         {
+            if (country == null)
+            {
+                return BadRequest();
+            }
+
+            var countryEntity = Mapper.Map<Country>(country);
+
+            if (_countryRepository.AddAsync(countryEntity).Result == null)
+            {
+                throw new Exception("Creating an country failed on save.");
+            }
+            var countryToReturn = Mapper.Map<CountryApiModel>(countryEntity);
+
+            return CreatedAtRoute("GetCountry", new { id = countryToReturn.Id }, countryToReturn);
         }
-        
+
+        [HttpPost("{id}")]
+        public IActionResult BlockCountryCreation(Guid id)
+        {
+            if (_countryRepository.EntityExists(id))
+            {
+                return  new StatusCodeResult(StatusCodes.Status409Conflict);
+            }
+            return NotFound();
+        }
+
         // PUT: api/abc/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
-        
+
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult DeleteCountry(Guid id)
         {
+            var countryFromRepo = _countryRepository.GetSingleAsync(id);
+            if (countryFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            foreach (var provience in countryFromRepo.Result.AllProviences)
+            {
+               _provienceRepository.DeleteAsync(provience);
+            }
+
+            if (_countryRepository.DeleteAsync(countryFromRepo.Result).Result==null)
+            {
+                throw new Exception($"Deleting country {id} failed on save.");
+            }
+            return NoContent();
+        }
+
+        [HttpOptions]
+        public IActionResult GetCountriesOptions()
+        {
+            Response.Headers.Add("Allow", "GET,OPTIONS,POST");
+            return Ok();
+        }
+
+        private string CreateCountriesResourceUri(CountryResourceParameters countryResourceParameters, ResourceUriType type)
+        {
+            switch (type)
+            {
+                case ResourceUriType.PreviousPage:
+                    return _urlHelper.Link("GetCountries",
+                        new
+                        {
+                            fields = countryResourceParameters.Fields,
+                            orderBy = countryResourceParameters.OrderBy,
+                            searchQuery= countryResourceParameters.SearchQuery,
+                            name= countryResourceParameters.Name,
+                            pageNumber = countryResourceParameters.PageNumber - 1,
+                            pageSize = countryResourceParameters.PageSize
+                        });
+                case ResourceUriType.NextPage:
+                    return _urlHelper.Link("GetCountries",
+                        new
+                        {
+                            fields = countryResourceParameters.Fields,
+                            orderBy = countryResourceParameters.OrderBy,
+                            searchQuery = countryResourceParameters.SearchQuery,
+                            name = countryResourceParameters.Name,
+                            pageNumber = countryResourceParameters.PageNumber + 1,
+                            pageSize = countryResourceParameters.PageSize
+                        });
+                default:
+                    return _urlHelper.Link("GetCountries",
+                        new
+                        {
+                            fields = countryResourceParameters.Fields,
+                            orderBy = countryResourceParameters.OrderBy,
+                            searchQuery = countryResourceParameters.SearchQuery,
+                            name = countryResourceParameters.Name,
+                            pageNumber = countryResourceParameters.PageNumber,
+                            pageSize = countryResourceParameters.PageSize
+                        });
+            }
         }
     }
 }

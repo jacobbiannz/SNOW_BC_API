@@ -8,9 +8,9 @@ namespace snow_bc_api.API.ApiModel
 {
     public class CountryApiModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
 
-        public ICollection<KeyValuePair<string, string>> AllProvices { get; set; }
+        public ICollection<ProvienceApiModel> Proviences { get; set; } = new List<ProvienceApiModel>();
     }
 }

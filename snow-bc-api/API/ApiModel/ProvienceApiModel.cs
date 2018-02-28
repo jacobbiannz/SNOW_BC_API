@@ -7,7 +7,7 @@ namespace snow_bc_api.API.ApiModel
 {
     public class ProvienceApiModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
 
         public KeyValuePair<String, String> CountryInfo { get; set; }
