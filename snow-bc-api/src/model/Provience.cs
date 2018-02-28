@@ -1,4 +1,4 @@
-﻿  using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,7 +14,7 @@ namespace snow_bc_api.src.model
         public string Name { get; set; }
 
         [ForeignKey("CountryId")]
-       
+
         public Country Country { get; set; }
 
         public Guid CountryId { get; set; }

@@ -22,6 +22,5 @@ namespace snow_bc_api.src.Repositories
     bool EntityExists(Guid id);
     Task<int> DeleteWhereAsync(Expression<Func<T, bool>> predicate);
     Task<int> CommitAsync();
-    bool Completed();
 }
 }

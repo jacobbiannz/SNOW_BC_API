@@ -9,8 +9,13 @@ namespace snow_bc_api.src.Repositories
 {
     public class ProvienceRepository : EntityRepository<Provience>, IProvienceRepository
     {
+        private BcApiDbContext _context;
         public ProvienceRepository(BcApiDbContext dbContext) : base(dbContext)
         {
+            _context = dbContext;
         }
+
+       
+
     }
 }

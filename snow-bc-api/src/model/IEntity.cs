@@ -16,5 +16,9 @@ namespace snow_bc_api.src.model
         DateTime? UpdatedDate { get; set; }
 
         string UpdatedBy { get; set; }
+
+        DateTime? DeleteDate { get; set; }
+
+        string DeletedBy { get; set; }
     }
 }

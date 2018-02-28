@@ -14,7 +14,6 @@ namespace snow_bc_api.src.Repositories
     where T : class, IEntity, new()
     {
         private BcApiDbContext _context;
-
         #region Properties
         public EntityRepository(BcApiDbContext context)
         {
@@ -70,6 +69,7 @@ namespace snow_bc_api.src.Repositories
         {
             // EntityEntry dbEntityEntry = _context.Entry<T>(entity);
             entity.CreatedDate = DateTime.UtcNow;
+            entity.CreatedBy = "admin";
             _context.Set<T>().Add(entity);
             await CommitAsync();
             return entity;
@@ -85,7 +85,10 @@ namespace snow_bc_api.src.Repositories
         public virtual async Task<T> DeleteAsync(T entity)
         {
             EntityEntry dbEntityEntry = _context.Entry<T>(entity);
-            dbEntityEntry.State = EntityState.Deleted;
+           //     dbEntityEntry.State = EntityState.Deleted;
+            dbEntityEntry.State = EntityState.Modified;
+            entity.DeleteDate = DateTime.UtcNow;
+            entity.DeletedBy = "admin";
             await CommitAsync();
             return entity;
         }
@@ -108,12 +111,8 @@ namespace snow_bc_api.src.Repositories
 
         public virtual Task<int> CommitAsync()
         {
-            return _context.SaveChangesAsync();
-        }
-
-        public bool Completed()
-        {
-            return CommitAsync().Result >= 0;
+           return _context.SaveChangesAsync();
+          
         }
     }
 }

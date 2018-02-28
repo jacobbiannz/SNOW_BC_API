@@ -19,23 +19,34 @@ namespace snow_bc_api.API.ApiModel.Mapping
         protected DomainToApiModelMappingProfile(string profileName)
         : base(profileName)
         {
-            CreateMap<Country, CountryApiModel>()
-                .ForMember(am => am.Name,
-                    map => map.MapFrom(s => s.Name))
-                .ForMember(am => am.AllProvices,
-                    s => s.ResolveUsing(src => ConvertProviences(src.AllProviences)));
+            CreateMap<Country, CountryApiModel>();
+             //   .ForMember(am => am.Name,
+              //      map => map.MapFrom(s => s.Name))
+             //   .ForMember(am => am.Proviences,
+             //       map => map.MapFrom(s => s.AllProviences));
 
-            CreateMap<Provience, ProvienceApiModel>()
-                .ForMember(am => am.Name,
-                    map => map.MapFrom(s => s.Name))
-                .ForMember(am => am.AllCities,
-                    s => s.ResolveUsing(src => ConvertCities(src.AllCities)))
-                .ForMember(am => am.CountryInfo,
-                    s => s.ResolveUsing(src => ConvertCountry(src.CountryId)));
+            CreateMap<Country, CountryApiModelForCreation>();
+         //       .ForMember(am => am.Name,
+         //           map => map.MapFrom(s => s.Name))
+          //      .ForMember(am => am.Proviences,
+          //          map => map.MapFrom(s => s.AllProviences));
 
-            CreateMap<City, CityApiModel>()
-                .ForMember(am => am.ProvienceInfo,
-                   s => s.ResolveUsing(src => ConvertProvience(src.ProvienceId)))
+            CreateMap<Provience, ProvienceApiModel>();
+           //     .ForMember(am => am.Name,
+           //         map => map.MapFrom(s => s.Name))
+             ////   .ForMember(am => am.AllCities,
+            //        s => s.ResolveUsing(src => ConvertCities(src.AllCities)))
+            //    .ForMember(am => am.CountryInfo,
+           //         s => s.ResolveUsing(src => ConvertCountry(src.CountryId)));
+
+            CreateMap<Provience, ProvienceApiModelForCreation>();
+           //     .ForMember(am => am.Name,
+           //         map => map.MapFrom(s => s.Name));
+
+
+            CreateMap<City, CityApiModel>();
+             //   .ForMember(am => am.ProvienceInfo,
+            //       s => s.ResolveUsing(src => ConvertProvience(src.ProvienceId)))
               ;
 
             /*
@@ -47,6 +58,7 @@ namespace snow_bc_api.API.ApiModel.Mapping
              .ForMember(vm => vm.AllProducts, s => s.ResolveUsing(src => ConvertProducts(src.AllProducts)));
 
             */
+            CreateMap<Provience, ProvienceApiModelForUpdate>();
         }
 
         /*
