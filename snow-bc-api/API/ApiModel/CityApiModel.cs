@@ -9,8 +9,7 @@ namespace snow_bc_api.API.ApiModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-
-        public KeyValuePair<String, String> ProvienceInfo { get; set; }
+        public int Rate { get; set; }
 
     }
 }

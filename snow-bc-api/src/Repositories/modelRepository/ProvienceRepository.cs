@@ -15,7 +15,12 @@ namespace snow_bc_api.src.Repositories
             _context = dbContext;
         }
 
-       
+        public IEnumerable<City> GetCitiesForProvience(Guid provienceId)
+        {
+            return _context.Cities
+                .Where(p => p.ProvienceId == provienceId).OrderBy(p => p.Name).ToList();
+        }
+
 
     }
 }

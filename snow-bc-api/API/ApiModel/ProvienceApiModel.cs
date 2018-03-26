@@ -10,8 +10,8 @@ namespace snow_bc_api.API.ApiModel
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-        public KeyValuePair<String, String> CountryInfo { get; set; }
+        public int Rate { get; set; }
 
-        public ICollection<KeyValuePair<string, string>> AllCities { get; set; }
+        //public ICollection<CityApiModel> Cities { get; set; } = new List<CityApiModel>();
     }
 }
