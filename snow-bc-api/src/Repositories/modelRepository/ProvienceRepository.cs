@@ -18,7 +18,7 @@ namespace snow_bc_api.src.Repositories
         public IEnumerable<City> GetCitiesForProvience(Guid provienceId)
         {
             return _context.Cities
-                .Where(p => p.ProvienceId == provienceId).OrderBy(p => p.Name).ToList();
+                .Where(p => p.ProvienceId == provienceId).OrderByDescending(r => r.Rate).ToList();
         }
 
 
