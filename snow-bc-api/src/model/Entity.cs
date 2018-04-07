@@ -23,5 +23,7 @@ namespace snow_bc_api.src.model
         public DateTime? DeleteDate { get; set; }
 
         public string DeletedBy { get; set; }
+
+        public int Rate { get; set; }
     }
 }

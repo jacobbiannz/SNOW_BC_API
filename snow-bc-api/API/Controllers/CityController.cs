@@ -15,49 +15,44 @@ using snow_bc_api.src.model;
 namespace snow_bc_api.API.Controllers
 {
 
-    [Route("api/cities")]
+    [Route("api/countries/{countryId}/proviences/{provienceId}/cities")]
     public class CityController : Controller
     {
         public int Page = 1;
         public int PageSize = 100;
 
-        private ILogger<CityController> _logger;
+        private readonly ICountryRepository _countryRepository;
+        private readonly IProvienceRepository _provienceRepository;
         private readonly ICityRepository _cityRepository;
-        public CityController(ICityRepository cityRepository, ILogger<CityController> logger)
+
+
+        private readonly ILogger _logger;
+
+        public CityController(ICountryRepository countryRepository, IProvienceRepository provienceRepository, ICityRepository cityRepository, ILogger<ProvienceController> logger)
         {
             _logger = logger;
+            _countryRepository = countryRepository;
+            _provienceRepository = provienceRepository;
             _cityRepository = cityRepository;
         }
 
         // GET: api/City
-        [HttpGet]
-        public ActionResult GetCities()
+        [HttpGet()]
+        public IActionResult GetCitiesForProvience(Guid countryId, Guid provienceId)
         {
-            var pagination = Request.Headers["Pagination"];
-
-            if (!string.IsNullOrEmpty(pagination))
+            if (!_countryRepository.EntityExists(countryId))
             {
-                string[] vals = pagination.ToString().Split(',');
-                int.TryParse(vals[0], out Page);
-                int.TryParse(vals[1], out PageSize);
+                return NotFound();
             }
 
-            int currentPage = Page;
-            int currentPageSize = PageSize;
-            var totalCities = _cityRepository.Count();
-            var totalPages = (int)Math.Ceiling((double)totalCities / PageSize);
+            if (!_provienceRepository.EntityExists(provienceId))
+            {
+                return NotFound();
+            }
 
+            var citiesForProvienceFromRepo = _provienceRepository.GetCitiesForProvience(provienceId);
+            var results = Mapper.Map<IEnumerable<CityApiModel>>(citiesForProvienceFromRepo);
 
-            IEnumerable<City> cityEntities = _cityRepository
-                .GetAll()
-                .OrderBy(s => s.Name)
-                .Skip((currentPage - 1) * currentPageSize)
-                .Take(currentPageSize)
-                .ToList();
-
-            Response.AddPagination(Page, PageSize, totalCities, totalPages);
-
-            var results = Mapper.Map<IEnumerable<CityApiModel>>(cityEntities);
             return Ok(results);
         }
 

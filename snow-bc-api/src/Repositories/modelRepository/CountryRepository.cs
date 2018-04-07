@@ -25,7 +25,7 @@ namespace snow_bc_api.src.Repositories
         public IEnumerable<Provience> GetProviencesForCountry(Guid countryId)
         {
             return _context.Proviences
-                .Where(p => p.CountryId == countryId).OrderBy(p => p.Name).ToList();
+                .Where(p => p.CountryId == countryId).OrderByDescending(r=>r.Rate).ToList();
         }
 
         public Provience GetProvienceForCountry(Guid countryId, Guid provienceId)

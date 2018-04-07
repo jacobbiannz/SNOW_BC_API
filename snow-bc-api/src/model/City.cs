@@ -17,7 +17,9 @@ namespace snow_bc_api.src.model
         public Provience Provience { get; set; }
 
         public Guid ProvienceId { get; set; }
-       
 
+        public ICollection<CityMonth> BestMonths { get; set; } = new List<CityMonth>();
+
+        public ICollection<Location> Locations { get; set; } = new List<Location>();
     }
 }

@@ -15,6 +15,14 @@ namespace snow_bc_api.src.Repositories
         IEnumerable<Country> GetCountries(IEnumerable<Guid> countryIds);
         PagedList<Country> GetCountries(CountryResourceParameters countryResourceParameters);
     }
-    public interface IProvienceRepository : IEntityRepository<Provience> { }
+    public interface IProvienceRepository : IEntityRepository<Provience> {
+
+        IEnumerable<City> GetCitiesForProvience(Guid provienceId);
+    }
     public interface ICityRepository : IEntityRepository<City> { }
+
+    public interface IMonthRepository : IEntityRepository<Month> {
+
+        IEnumerable<City> GetCitiesForMonth(Guid monthId);
+    }
 }
