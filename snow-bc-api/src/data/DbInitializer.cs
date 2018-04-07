@@ -30,6 +30,33 @@ namespace snow_bc_api.src.data
             }
             context.SaveChanges();
 
+
+            // month
+            var Months = new Month[]
+            {
+                new Month{Name="January", CreatedDate = DateTime.Now,Rate = 5 },
+                new Month{Name="February", CreatedDate = DateTime.Now,Rate = 5 },
+                new Month{Name="Marth", CreatedDate = DateTime.Now,Rate = 5 },
+                new Month{Name="April", CreatedDate = DateTime.Now,Rate = 5 },
+                new Month{Name="May", CreatedDate = DateTime.Now,Rate = 5 },
+                new Month{Name="June", CreatedDate = DateTime.Now,Rate = 5 },
+                new Month{Name="July", CreatedDate = DateTime.Now,Rate = 5 },
+                new Month{Name="August", CreatedDate = DateTime.Now,Rate = 5 },
+                new Month{Name="September", CreatedDate = DateTime.Now,Rate = 5 },
+                new Month{Name="October", CreatedDate = DateTime.Now,Rate = 5 },
+                new Month{Name="November", CreatedDate = DateTime.Now,Rate = 5 },
+                new Month{Name="December", CreatedDate = DateTime.Now,Rate = 5 }
+            };
+
+            foreach (Month m in Months)
+            {
+                context.Months.Add(m);
+            }
+
+
+            context.SaveChanges();
+
+
             //-------------
             var Proviences = new Provience[]
             {
@@ -326,6 +353,28 @@ namespace snow_bc_api.src.data
                 context.Cities.Add(c);
             }
             context.SaveChanges();
+
+
+            // CityMonth
+
+
+            var cityMonths = new List<CityMonth>();
+
+            foreach (var city in cities)
+            {
+                foreach (var month in Months)
+                {
+                    cityMonths.Add( new CityMonth { CityId = city.Id, MonthId = month.Id });
+                }
+
+            }
+
+            foreach (CityMonth c in cityMonths)
+            {
+                context.CityMonths.Add(c);
+            }
+            context.SaveChanges();
+
         }
     }
 }

@@ -20,4 +20,9 @@ namespace snow_bc_api.src.Repositories
         IEnumerable<City> GetCitiesForProvience(Guid provienceId);
     }
     public interface ICityRepository : IEntityRepository<City> { }
+
+    public interface IMonthRepository : IEntityRepository<Month> {
+
+        IEnumerable<City> GetCitiesForMonth(Guid monthId);
+    }
 }

@@ -14,6 +14,8 @@ namespace snow_bc_api.src.data
         public DbSet<Country> Countries { get; set; }
         public DbSet<Provience> Proviences { get; set; }
         public DbSet<City> Cities { get; set; }
+        public DbSet<Month> Months { get; set; }
+        public DbSet<CityMonth> CityMonths { get; set; }
 
         public String ConnectionString { get; }
         public IEntityMapper EntityMapper { get; }

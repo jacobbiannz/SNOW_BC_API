@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using NLog.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
+using snow_bc_api.src.Repositories.modelRepository;
 
 namespace snow_bc_api
 {
@@ -59,6 +60,8 @@ namespace snow_bc_api
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<ICityRepository, CityRepository>();
             services.AddScoped<IProvienceRepository, ProvienceRepository>();
+            services.AddScoped<IMonthRepository, MonthRepository>();
+
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
