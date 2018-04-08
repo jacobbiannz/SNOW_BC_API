@@ -59,6 +59,10 @@ namespace snow_bc_api.API.ApiModel.Mapping
 
             */
             CreateMap<Provience, ProvienceApiModelForUpdate>();
+
+
+
+            CreateMap<Month, MonthApiModel>();
         }
 
         /*
