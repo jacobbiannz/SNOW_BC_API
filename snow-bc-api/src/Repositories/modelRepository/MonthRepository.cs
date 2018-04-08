@@ -30,5 +30,9 @@ namespace snow_bc_api.src.Repositories.modelRepository
             return _context.Cities.Where(c=> cities.Contains(c.Id)).OrderByDescending(c => c.Rate).ToList();
         }
 
+        public IEnumerable<Month> GetMonths()
+        {
+            return _context.Months;
+        }
     }
 }

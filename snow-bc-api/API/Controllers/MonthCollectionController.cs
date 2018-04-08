@@ -10,34 +10,25 @@ using System.Threading.Tasks;
 
 namespace snow_bc_api.API.Controllers
 {
-    [Route("api/months/{monthId}/cities")]
-    public class MonthController : Controller
+    [Route("api/monthCollection")]
+    public class MonthCollectionController :Controller
     {
         private readonly ILogger _logger;
         private readonly IMonthRepository _monthRepository;
 
-        public MonthController(IMonthRepository monthRepository, ILogger<MonthController> logger)
+        public MonthCollectionController(IMonthRepository monthRepository, ILogger<MonthCollectionController> logger)
         {
             _logger = logger;
             _monthRepository = monthRepository;
         }
 
-
         [HttpGet()]
-        public IActionResult GetCitiesForMonth(Guid monthId)
+        public IActionResult GetMonths()
         {
-            if (!_monthRepository.EntityExists(monthId))
-            {
-                return NotFound();
-            }
-
-            var citiesForMonthFromRepo = _monthRepository.GetCitiesForMonth(monthId);
-            var results = Mapper.Map<IEnumerable<CityApiModel>>(citiesForMonthFromRepo);
+            var monthsFromRepo = _monthRepository.GetMonths();
+            var results = Mapper.Map<IEnumerable<MonthApiModel>>(monthsFromRepo);
 
             return Ok(results);
         }
-
-        
-
     }
 }

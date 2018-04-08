@@ -130,11 +130,7 @@ namespace snow_bc_api.API.Controllers
             return NotFound();
         }
 
-        // PUT: api/abc/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+        
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
