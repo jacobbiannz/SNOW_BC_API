@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace snow_bc_api.API.Controllers
 {
-    [Route("api/monthCollection")]
+    [Route("api/monthcollection")]
     public class MonthCollectionController :Controller
     {
         private readonly ILogger _logger;
