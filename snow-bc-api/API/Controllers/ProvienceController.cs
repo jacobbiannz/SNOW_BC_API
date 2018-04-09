@@ -44,7 +44,27 @@ namespace snow_bc_api.API.Controllers
             }
 
             var proviencesForCountryFromRepo = _countryRepository.GetProviencesForCountry(countryId);
-            var results = Mapper.Map<IEnumerable<ProvienceApiModel>>(proviencesForCountryFromRepo);
+
+
+            var citiesApiModel = new Dictionary<string, IEnumerable<CityApiModel>>();
+
+            foreach (var provience in proviencesForCountryFromRepo)
+            {
+               var citiesFromRepo =  _provienceRepository.GetCitiesForProvience(provience.Id).Take(5);
+                citiesApiModel.Add(provience.Id.ToString(), Mapper.Map<IEnumerable<CityApiModel>>(citiesFromRepo));
+            }
+
+            var proviencesApiModel = Mapper.Map<IEnumerable<ProvienceApiModel>>(proviencesForCountryFromRepo);
+
+            foreach (var provienceApiModel in proviencesApiModel)
+            {
+                foreach (var cityApiModel in citiesApiModel[provienceApiModel.Id.ToString()])
+                {
+                    provienceApiModel.Cities.Add(cityApiModel);
+                }
+            }
+
+            var results = proviencesApiModel;
 
             return Ok(results);
         }
