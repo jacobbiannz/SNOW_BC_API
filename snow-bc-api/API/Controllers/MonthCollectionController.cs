@@ -26,9 +26,21 @@ namespace snow_bc_api.API.Controllers
         public IActionResult GetMonths()
         {
             var monthsFromRepo = _monthRepository.GetMonths();
-            var results = Mapper.Map<IEnumerable<MonthApiModel>>(monthsFromRepo);
 
-            return Ok(results);
+            
+            var monthsApiModel = Mapper.Map<IEnumerable<MonthApiModel>>(monthsFromRepo);
+
+
+            foreach (var monthApiModel in monthsApiModel)
+            {
+              var citiesFromRepo =  _monthRepository.GetCitiesForMonth(monthApiModel.Id).Take(5);
+
+                foreach (var city in citiesFromRepo)
+                {
+                    monthApiModel.Cities.Add(Mapper.Map<CityApiModel>(city));
+                }
+            }
+            return Ok(monthsApiModel);
         }
     }
 }
