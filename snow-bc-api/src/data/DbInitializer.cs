@@ -142,11 +142,21 @@ namespace snow_bc_api.src.data
 
             var zhejiangCities = new City[]
             {
-                new City{Name="Hangzhou", Provience = zhejiang, CreatedDate = DateTime.Now, Rate = zhejiang.Rate},
-                new City{Name="Wuzhen", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate},
-                new City{Name="Xitang", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate},
-                new City{Name="Qiandaohu", Provience = zhejiang, CreatedDate = DateTime.Now, Rate = zhejiang.Rate},
-                new City{Name="Putuoshan", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate},
+                new City{Name="Hangzhou", Provience = zhejiang, CreatedDate = DateTime.Now, Rate = zhejiang.Rate,
+                    MainImage = System.IO.File.ReadAllBytes(@"C:\Projects\BC_20180326\snow-bc-api\Images\hangzhou.png")
+                },
+                new City{Name="Wuzhen", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate,
+                MainImage = System.IO.File.ReadAllBytes(@"C:\Projects\BC_20180326\snow-bc-api\Images\wuzhen.png")
+                },
+                new City{Name="Xitang", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate,
+                MainImage = System.IO.File.ReadAllBytes(@"C:\Projects\BC_20180326\snow-bc-api\Images\xitang.png")
+                },
+                new City{Name="Qiandaohu", Provience = zhejiang, CreatedDate = DateTime.Now, Rate = zhejiang.Rate,
+                MainImage = System.IO.File.ReadAllBytes(@"C:\Projects\BC_20180326\snow-bc-api\Images\qiandaohu.png")
+                },
+                new City{Name="Putuoshan", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate,
+                MainImage = System.IO.File.ReadAllBytes(@"C:\Projects\BC_20180326\snow-bc-api\Images\putuoshan.png")
+                },
                 new City{Name="Dongjidao", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate},
                 new City{Name="Nantou", Provience = zhejiang, CreatedDate = DateTime.Now, Rate = zhejiang.Rate}
 
