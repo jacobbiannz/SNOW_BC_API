@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using snow_bc_api.API.Controllers;
 using snow_bc_api.src.model;
 using snow_bc_api.src.Repositories;
@@ -12,13 +16,21 @@ namespace snow_bc_api.API.ApiModel.Mapping
 {
     public class DomainToApiModelMappingProfile : Profile
     {
+        private IHostingEnvironment _env;
+
         public DomainToApiModelMappingProfile()
         : this("MyProfile")
         {
+          
         }
-        protected DomainToApiModelMappingProfile(string profileName)
+        public DomainToApiModelMappingProfile(string profileName) : base(profileName)
+        {
+        }
+
+        protected DomainToApiModelMappingProfile(IHostingEnvironment env, string profileName)
         : base(profileName)
         {
+            _env = env;
             CreateMap<Country, CountryApiModel>();
              //   .ForMember(am => am.Name,
               //      map => map.MapFrom(s => s.Name))
@@ -34,7 +46,7 @@ namespace snow_bc_api.API.ApiModel.Mapping
             CreateMap<Provience, ProvienceApiModel>();
            //     .ForMember(am => am.Name,
            //         map => map.MapFrom(s => s.Name))
-             ////   .ForMember(am => am.AllCities,
+             //   .ForMember(am => am.AllCities,
             //        s => s.ResolveUsing(src => ConvertCities(src.AllCities)))
             //    .ForMember(am => am.CountryInfo,
            //         s => s.ResolveUsing(src => ConvertCountry(src.CountryId)));
@@ -44,10 +56,9 @@ namespace snow_bc_api.API.ApiModel.Mapping
            //         map => map.MapFrom(s => s.Name));
 
 
-            CreateMap<City, CityApiModel>();
-             //   .ForMember(am => am.ProvienceInfo,
-            //       s => s.ResolveUsing(src => ConvertProvience(src.ProvienceId)))
-              ;
+            CreateMap<City, CityApiModel>()
+                .ForMember(am => am.MainImagePath,
+                   s => s.ResolveUsing(src => MapImagePath(src.Id)));
 
             /*
             CreateMap<Category, CategoryViewModel>()
@@ -64,6 +75,8 @@ namespace snow_bc_api.API.ApiModel.Mapping
 
             CreateMap<Month, MonthApiModel>();
         }
+
+      
 
         /*
         private object ConvertProducts(ICollection<Product> src)
@@ -107,6 +120,13 @@ namespace snow_bc_api.API.ApiModel.Mapping
         private object ConvertCountry(Guid countryId)
         {
             return new KeyValuePair<string, string>("CountryId", countryId.ToString());
+        }
+
+        private string MapImagePath(Guid cityId)
+        {
+            var webRoot = _env.WebRootPath;
+            var path = Path.Combine(webRoot + "/images", cityId + ".png");
+            return path;
         }
     }
 }

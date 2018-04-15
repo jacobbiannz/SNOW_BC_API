@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using snow_bc_api.API.ApiModel;
@@ -15,11 +16,12 @@ namespace snow_bc_api.API.Controllers
     {
         private readonly ILogger _logger;
         private readonly IMonthRepository _monthRepository;
-
-        public MonthCollectionController(IMonthRepository monthRepository, ILogger<MonthCollectionController> logger)
+        private IHostingEnvironment _env;
+        public MonthCollectionController(IHostingEnvironment env, IMonthRepository monthRepository, ILogger<MonthCollectionController> logger)
         {
             _logger = logger;
             _monthRepository = monthRepository;
+            _env = env;
         }
 
         [HttpGet()]
@@ -37,9 +39,10 @@ namespace snow_bc_api.API.Controllers
 
                 foreach (var city in citiesFromRepo)
                 {
-                    monthApiModel.Cities.Add(Mapper.Map<CityApiModel>(city));
-                }
+                    
+                } 
             }
+            
             return Ok(monthsApiModel);
         }
     }
