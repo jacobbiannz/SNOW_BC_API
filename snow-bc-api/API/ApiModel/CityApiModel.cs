@@ -10,6 +10,6 @@ namespace snow_bc_api.API.ApiModel
         public Guid Id { get; set; }
         public string Name { get; set; }
         public int Rate { get; set; }
-        public string MainImagePath { get; set; }
+        public string MainImages { get; set; }
     }
 }

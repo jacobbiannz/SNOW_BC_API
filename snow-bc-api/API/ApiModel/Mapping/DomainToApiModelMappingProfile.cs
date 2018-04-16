@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using snow_bc_api.API.Controllers;
+using snow_bc_api.src.Helpers;
 using snow_bc_api.src.model;
 using snow_bc_api.src.Repositories;
 
@@ -16,21 +17,16 @@ namespace snow_bc_api.API.ApiModel.Mapping
 {
     public class DomainToApiModelMappingProfile : Profile
     {
-        private IHostingEnvironment _env;
-
         public DomainToApiModelMappingProfile()
         : this("MyProfile")
         {
           
         }
-        public DomainToApiModelMappingProfile(string profileName) : base(profileName)
-        {
-        }
 
-        protected DomainToApiModelMappingProfile(IHostingEnvironment env, string profileName)
+        protected DomainToApiModelMappingProfile(string profileName)
         : base(profileName)
         {
-            _env = env;
+            //_env = env;
             CreateMap<Country, CountryApiModel>();
              //   .ForMember(am => am.Name,
               //      map => map.MapFrom(s => s.Name))
@@ -52,13 +48,13 @@ namespace snow_bc_api.API.ApiModel.Mapping
            //         s => s.ResolveUsing(src => ConvertCountry(src.CountryId)));
 
             CreateMap<Provience, ProvienceApiModelForCreation>();
-           //     .ForMember(am => am.Name,
-           //         map => map.MapFrom(s => s.Name));
+            //     .ForMember(am => am.Name,
+            //         map => map.MapFrom(s => s.Name));
 
 
             CreateMap<City, CityApiModel>()
-                .ForMember(am => am.MainImagePath,
-                   s => s.ResolveUsing(src => MapImagePath(src.Id)));
+                .ForMember(am => am.MainImages,
+                     s => s.ResolveUsing(src => MapImagePath(src.Id)));
 
             /*
             CreateMap<Category, CategoryViewModel>()
@@ -122,10 +118,10 @@ namespace snow_bc_api.API.ApiModel.Mapping
             return new KeyValuePair<string, string>("CountryId", countryId.ToString());
         }
 
-        private string MapImagePath(Guid cityId)
+        private string MapImagePath(Guid id)
         {
-            var webRoot = _env.WebRootPath;
-            var path = Path.Combine(webRoot + "/images", cityId + ".png");
+            var webRoot = Global.ContentRootPath;
+            var path = Path.Combine( webRoot  + "/images", id + ".png");
             return path;
         }
     }

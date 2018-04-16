@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using NLog.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using snow_bc_api.src.Repositories.modelRepository;
+using snow_bc_api.src.Helpers;
 
 namespace snow_bc_api
 {
@@ -102,6 +103,8 @@ namespace snow_bc_api
         {
             loggerFactory.AddDebug(LogLevel.Information);
             loggerFactory.AddConsole();
+
+            Global.ContentRootPath = env.ContentRootPath;
 
             loggerFactory.AddNLog();
 

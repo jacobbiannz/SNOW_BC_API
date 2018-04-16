@@ -10,6 +10,6 @@ namespace snow_bc_api.API.ApiModel
         public Guid Id { get; set; }
         public string Name { get; set; }
         public int Rate { get; set; }
-        public ICollection<CityApiModel> Cities { get; set; } = new List<CityApiModel>();
+        public ICollection<CityApiModel> TopCities { get; set; } = new List<CityApiModel>();
     }
 }
