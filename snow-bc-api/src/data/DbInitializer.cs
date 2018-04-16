@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using snow_bc_api.src.model;
@@ -140,13 +142,25 @@ namespace snow_bc_api.src.data
             //Zhe jiang
             var zhejiang = Proviences.ToList().Find(s => s.Name == "Zhejiang");
 
+            
+
             var zhejiangCities = new City[]
             {
-                new City{Name="Hangzhou", Provience = zhejiang, CreatedDate = DateTime.Now, Rate = zhejiang.Rate},
-                new City{Name="Wuzhen", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate},
-                new City{Name="Xitang", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate},
-                new City{Name="Qiandaohu", Provience = zhejiang, CreatedDate = DateTime.Now, Rate = zhejiang.Rate},
-                new City{Name="Putuoshan", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate},
+                new City{Name="Hangzhou", Provience = zhejiang, CreatedDate = DateTime.Now, Rate = zhejiang.Rate,
+                    MainImage = File.ReadAllBytes(@"C:\Projects\BC_20180326\snow-bc-api\Images\hangzhou.png")
+                },
+                new City{Name="Wuzhen", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate,
+                MainImage =File.ReadAllBytes(@"C:\Projects\BC_20180326\snow-bc-api\Images\wuzhen.png")
+                },
+                new City{Name="Xitang", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate,
+                MainImage = File.ReadAllBytes(@"C:\Projects\BC_20180326\snow-bc-api\Images\xitang.png")
+                },
+                new City{Name="Qiandaohu", Provience = zhejiang, CreatedDate = DateTime.Now, Rate = zhejiang.Rate,
+                MainImage=File.ReadAllBytes(@"C:\Projects\BC_20180326\snow-bc-api\Images\qiandaohu.png")
+                },
+                new City{Name="Putuoshan", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate,
+                MainImage = File.ReadAllBytes(@"C:\Projects\BC_20180326\snow-bc-api\Images\putuoshan.png")
+                },
                 new City{Name="Dongjidao", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate},
                 new City{Name="Nantou", Provience = zhejiang, CreatedDate = DateTime.Now, Rate = zhejiang.Rate}
 
@@ -376,5 +390,16 @@ namespace snow_bc_api.src.data
             context.SaveChanges();
 
         }
+
+        private static byte[] Compress(byte[] b)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (GZipStream z = new GZipStream(ms, CompressionMode.Compress, true))
+                    z.Write(b, 0, b.Length);
+                return ms.ToArray();
+            }
+        }
+
     }
 }
