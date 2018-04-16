@@ -39,7 +39,8 @@ namespace snow_bc_api.API.Controllers
 
                 foreach (var city in citiesFromRepo)
                 {
-                    
+                    var cityApiModel = Mapper.Map<CityApiModel>(city);
+                    monthApiModel.TopCities.Add(cityApiModel);
                 } 
             }
             
