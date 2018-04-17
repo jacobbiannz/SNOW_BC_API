@@ -28,7 +28,7 @@ namespace snow_bc_api
                     var dbContext = scope.ServiceProvider.GetService<BcApiDbContext>();
 
                     // place your DB seeding code here
-                    DbInitializer.Initialize(dbContext);
+                    DbInitializer.Initialize(dbContext, Environment.CurrentDirectory);
                 }
                 host.Run();
             }

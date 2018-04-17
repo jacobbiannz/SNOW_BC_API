@@ -19,6 +19,7 @@ namespace snow_bc_api.src.data
 
          //   entity.Property(p => p.Id).UseSqlServerIdentityColumn();
             entity.HasOne(a => a.Provience).WithMany(s => s.AllCities).HasForeignKey(a => a.ProvienceId);
+            entity.HasMany(a => a.CityImages).WithOne(s => s.City).HasForeignKey(a=>a.CityId);
         }
     }
 }

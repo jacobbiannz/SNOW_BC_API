@@ -9,7 +9,7 @@ namespace snow_bc_api.src.Repositories.modelRepository
 {
     public class MonthRepository : EntityRepository<Month>, IMonthRepository
     {
-        private BcApiDbContext _context;
+        private readonly BcApiDbContext _context;
         public MonthRepository(BcApiDbContext dbContext) : base(dbContext)
         {
             _context = dbContext;

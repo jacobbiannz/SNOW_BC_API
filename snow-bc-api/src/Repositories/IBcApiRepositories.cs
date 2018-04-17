@@ -27,4 +27,9 @@ namespace snow_bc_api.src.Repositories
 
         IEnumerable<Month> GetMonths();
     }
+
+    public interface IImageRepository : IEntityRepository<Image>
+    {
+        byte[] GetImage(Guid imageId);
+    }
 }

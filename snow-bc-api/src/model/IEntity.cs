@@ -22,7 +22,5 @@ namespace snow_bc_api.src.model
         string DeletedBy { get; set; }
 
         int Rate { get; set; }
-
-        byte[] MainImage { get; set; }
     }
 }
