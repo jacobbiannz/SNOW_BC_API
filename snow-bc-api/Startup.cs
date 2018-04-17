@@ -62,7 +62,7 @@ namespace snow_bc_api
             services.AddScoped<ICityRepository, CityRepository>();
             services.AddScoped<IProvienceRepository, ProvienceRepository>();
             services.AddScoped<IMonthRepository, MonthRepository>();
-
+            services.AddScoped<IImageRepository, ImageRepository>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
@@ -103,8 +103,6 @@ namespace snow_bc_api
         {
             loggerFactory.AddDebug(LogLevel.Information);
             loggerFactory.AddConsole();
-
-            Global.ContentRootPath = env.ContentRootPath;
 
             loggerFactory.AddNLog();
 

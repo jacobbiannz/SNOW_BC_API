@@ -4,13 +4,14 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using snow_bc_api.src.model;
 
 namespace snow_bc_api.src.data
 {
     public class DbInitializer
     {
-        public static void Initialize(BcApiDbContext context)
+        public static void Initialize(BcApiDbContext context, string path)
         {
             context.Database.EnsureCreated();
 
@@ -142,30 +143,28 @@ namespace snow_bc_api.src.data
             //Zhe jiang
             var zhejiang = Proviences.ToList().Find(s => s.Name == "Zhejiang");
 
-            
-
             var zhejiangCities = new City[]
             {
-                new City{Name="Hangzhou", Provience = zhejiang, CreatedDate = DateTime.Now, Rate = zhejiang.Rate,
-                    MainImage = File.ReadAllBytes(@"C:\Projects\BC_20180326\snow-bc-api\Images\hangzhou.png")
+                new City{Name="Hangzhou", Provience = zhejiang, CreatedDate = DateTime.Now, Rate = zhejiang.Rate
                 },
-                new City{Name="Wuzhen", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate,
-                MainImage =File.ReadAllBytes(@"C:\Projects\BC_20180326\snow-bc-api\Images\wuzhen.png")
+                new City{Name="Wuzhen", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate
+               
                 },
-                new City{Name="Xitang", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate,
-                MainImage = File.ReadAllBytes(@"C:\Projects\BC_20180326\snow-bc-api\Images\xitang.png")
+                new City{Name="Xitang", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate
+               
                 },
-                new City{Name="Qiandaohu", Provience = zhejiang, CreatedDate = DateTime.Now, Rate = zhejiang.Rate,
-                MainImage=File.ReadAllBytes(@"C:\Projects\BC_20180326\snow-bc-api\Images\qiandaohu.png")
+                new City{Name="Qiandaohu", Provience = zhejiang, CreatedDate = DateTime.Now, Rate = zhejiang.Rate
                 },
-                new City{Name="Putuoshan", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate,
-                MainImage = File.ReadAllBytes(@"C:\Projects\BC_20180326\snow-bc-api\Images\putuoshan.png")
+                new City{Name="Putuoshan", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate
                 },
                 new City{Name="Dongjidao", Provience = zhejiang, CreatedDate = DateTime.Now , Rate = zhejiang.Rate},
                 new City{Name="Nantou", Provience = zhejiang, CreatedDate = DateTime.Now, Rate = zhejiang.Rate}
 
             };
             cities.AddRange(zhejiangCities);
+
+
+       
 
             //Hai nan
             var hainan = Proviences.ToList().Find(s => s.Name == "Hainan");
@@ -387,18 +386,38 @@ namespace snow_bc_api.src.data
             {
                 context.CityMonths.Add(c);
             }
+
+
+            var cityImages = new List<CityImage>();
+
+            var zhejiangImages = new Image[]
+            {
+
+                new Image{Name = "Hangzhou",   IsMainImage = true, Data = File.ReadAllBytes( path + @"\Images\hangzhou.png"), Path = Path.GetFullPath(path + @"\Images\hangzhou.png") , Type = Path.GetExtension(path + @"\Images\hangzhou.png")},
+                new Image{Name = "Putuoshan",  IsMainImage = true, Data = File.ReadAllBytes(path +@"\Images\putuoshan.png"), Path = Path.GetFullPath(path + @"\Images\putuoshan.png") , Type = Path.GetExtension(path + @"\Images\putuoshan.png")},
+                new Image{Name = "Qiandaohu",  IsMainImage = true, Data = File.ReadAllBytes(path +@"\Images\qiandaohu.png"), Path = Path.GetFullPath(path + @"\Images\qiandaohu.png") , Type = Path.GetExtension(path + @"\Images\qiandaohu.png")},
+                new Image{Name = "Wuzhen", IsMainImage = true, Data = File.ReadAllBytes(path +@"\Images\wuzhen.png"), Path = Path.GetFullPath(path + @"\Images\wuzhen.png") , Type = Path.GetExtension(path + @"\Images\wuzhen.png")},
+                new Image{Name = "Xitang",  IsMainImage = true, Data = File.ReadAllBytes(path +@"\Images\xitang.png"), Path = Path.GetFullPath(path + @"\Images\xitang.png") , Type = Path.GetExtension(path + @"\Images\xitang.png")},
+
+            };
+            context.Images.AddRange(zhejiangImages);
+
+          //  context.SaveChanges();
+
+            foreach (var city in cities)
+            {
+                foreach (var image in zhejiangImages)
+                {
+                    if (city.Name.ToLower() == image.Name.ToLower())
+                    cityImages.Add(new CityImage { CityId = city.Id, ImageId = image.Id });
+                } 
+            }
+            context.CityImages.AddRange(cityImages);
+
+
+
             context.SaveChanges();
 
-        }
-
-        private static byte[] Compress(byte[] b)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                using (GZipStream z = new GZipStream(ms, CompressionMode.Compress, true))
-                    z.Write(b, 0, b.Length);
-                return ms.ToArray();
-            }
         }
 
     }

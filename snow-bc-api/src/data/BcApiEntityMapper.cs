@@ -19,7 +19,9 @@ namespace snow_bc_api.src.data
                 new CityMonthMapping() as IEntityMap,
                 new SightMapping() as IEntityMap,
                 new LocationMapping() as IEntityMap,
-                new FoodAndDrinkMapping() as IEntityMap
+                new FoodAndDrinkMapping() as IEntityMap,
+                new ImageMap() as IEntityMap,
+                new CityImageMap() as IEntityMap,
             };
         }
     }
