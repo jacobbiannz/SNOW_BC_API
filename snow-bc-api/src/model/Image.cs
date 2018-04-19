@@ -18,7 +18,11 @@ namespace snow_bc_api.src.model
 
         public string Type { get; set; }
 
-       
+        [ForeignKey("CityId")]
+        public virtual City City { get; set; }
+
+        public Guid CityId { get; set; }
+
         public bool IsMainImage { get; set; }
     }
 }

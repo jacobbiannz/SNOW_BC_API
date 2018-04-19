@@ -26,7 +26,8 @@ namespace snow_bc_api.src.Repositories.modelRepository
                     cities.Add(cityMonth.CityId);
                 }
             }
-            
+            _context.Images.ToList(); ;
+
             return _context.Cities.Where(c=> cities.Contains(c.Id)).OrderByDescending(c => c.Rate).ToList();
         }
 

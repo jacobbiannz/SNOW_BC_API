@@ -14,14 +14,14 @@ namespace snow_bc_api.src.model
         public string Name { get; set; }
 
         [ForeignKey("ProvienceId")]
-        public Provience Provience { get; set; }
+        public virtual Provience Provience { get; set; }
 
         public Guid ProvienceId { get; set; }
 
-        public ICollection<CityImage> CityImages { get; set; } = new List<CityImage>();
+        public virtual ICollection<Image> Images { get; set; } = new List<Image>();
 
-        public ICollection<CityMonth> BestMonths { get; set; } = new List<CityMonth>();
+        public virtual ICollection<CityMonth> BestMonths { get; set; } = new List<CityMonth>();
 
-        public ICollection<Location> Locations { get; set; } = new List<Location>();
+        public virtual ICollection<Location> Locations { get; set; } = new List<Location>();
     }
 }

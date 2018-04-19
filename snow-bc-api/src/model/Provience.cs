@@ -15,11 +15,11 @@ namespace snow_bc_api.src.model
 
         [ForeignKey("CountryId")]
 
-        public Country Country { get; set; }
+        public virtual Country Country { get; set; }
 
         public Guid CountryId { get; set; }
 
-        public ICollection<City> AllCities { get; set; } = new List<City>();
+        public virtual ICollection<City> AllCities { get; set; } = new List<City>();
 
     }
 }

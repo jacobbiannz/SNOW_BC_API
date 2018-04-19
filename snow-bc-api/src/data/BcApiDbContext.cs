@@ -19,9 +19,7 @@ namespace snow_bc_api.src.data
 
         public DbSet<Image> Images { get; set; }
 
-        public DbSet<CityImage> CityImages { get; set; }
-
-
+     
         public String ConnectionString { get; }
         public IEntityMapper EntityMapper { get; }
      
