@@ -388,33 +388,18 @@ namespace snow_bc_api.src.data
             }
 
 
-            var cityImages = new List<CityImage>();
-
+           
             var zhejiangImages = new Image[]
             {
 
-                new Image{Name = "Hangzhou",   IsMainImage = true, Data = File.ReadAllBytes( path + @"\Images\hangzhou.png"), Path = Path.GetFullPath(path + @"\Images\hangzhou.png") , Type = Path.GetExtension(path + @"\Images\hangzhou.png")},
-                new Image{Name = "Putuoshan",  IsMainImage = true, Data = File.ReadAllBytes(path +@"\Images\putuoshan.png"), Path = Path.GetFullPath(path + @"\Images\putuoshan.png") , Type = Path.GetExtension(path + @"\Images\putuoshan.png")},
-                new Image{Name = "Qiandaohu",  IsMainImage = true, Data = File.ReadAllBytes(path +@"\Images\qiandaohu.png"), Path = Path.GetFullPath(path + @"\Images\qiandaohu.png") , Type = Path.GetExtension(path + @"\Images\qiandaohu.png")},
-                new Image{Name = "Wuzhen", IsMainImage = true, Data = File.ReadAllBytes(path +@"\Images\wuzhen.png"), Path = Path.GetFullPath(path + @"\Images\wuzhen.png") , Type = Path.GetExtension(path + @"\Images\wuzhen.png")},
-                new Image{Name = "Xitang",  IsMainImage = true, Data = File.ReadAllBytes(path +@"\Images\xitang.png"), Path = Path.GetFullPath(path + @"\Images\xitang.png") , Type = Path.GetExtension(path + @"\Images\xitang.png")},
+                new Image{Name = "Hangzhou", City= cities.Find(c=>c.Name =="Hangzhou"), IsMainImage = true, Data = File.ReadAllBytes( path + @"\Images\hangzhou.png"), Path = Path.GetFullPath(path + @"\Images\hangzhou.png") , Type = Path.GetExtension(path + @"\Images\hangzhou.png")},
+                new Image{Name = "Putuoshan", City= cities.Find(c=>c.Name =="Putuoshan"), IsMainImage = true, Data = File.ReadAllBytes(path +@"\Images\putuoshan.png"), Path = Path.GetFullPath(path + @"\Images\putuoshan.png") , Type = Path.GetExtension(path + @"\Images\putuoshan.png")},
+                new Image{Name = "Qiandaohu", City= cities.Find(c=>c.Name =="Qiandaohu"), IsMainImage = true, Data = File.ReadAllBytes(path +@"\Images\qiandaohu.png"), Path = Path.GetFullPath(path + @"\Images\qiandaohu.png") , Type = Path.GetExtension(path + @"\Images\qiandaohu.png")},
+                new Image{Name = "Wuzhen", City= cities.Find(c=>c.Name =="Wuzhen"),IsMainImage = true, Data = File.ReadAllBytes(path +@"\Images\wuzhen.png"), Path = Path.GetFullPath(path + @"\Images\wuzhen.png") , Type = Path.GetExtension(path + @"\Images\wuzhen.png")},
+                new Image{Name = "Xitang",  City= cities.Find(c=>c.Name =="Xitang"),IsMainImage = true, Data = File.ReadAllBytes(path +@"\Images\xitang.png"), Path = Path.GetFullPath(path + @"\Images\xitang.png") , Type = Path.GetExtension(path + @"\Images\xitang.png")},
 
             };
             context.Images.AddRange(zhejiangImages);
-
-          //  context.SaveChanges();
-
-            foreach (var city in cities)
-            {
-                foreach (var image in zhejiangImages)
-                {
-                    if (city.Name.ToLower() == image.Name.ToLower())
-                    cityImages.Add(new CityImage { CityId = city.Id, ImageId = image.Id });
-                } 
-            }
-            context.CityImages.AddRange(cityImages);
-
-
 
             context.SaveChanges();
 

@@ -54,7 +54,7 @@ namespace snow_bc_api.API.ApiModel.Mapping
 
             CreateMap<City, CityApiModel>()
                 .ForMember(am => am.MainImageId,
-                     s => s.ResolveUsing(src => MapImagePath(src.CityImages)));
+                     s => s.ResolveUsing(src => MapImagePath(src.Images)));
 
             /*
             CreateMap<Category, CategoryViewModel>()
@@ -121,14 +121,14 @@ namespace snow_bc_api.API.ApiModel.Mapping
             return new KeyValuePair<string, string>("CountryId", countryId.ToString());
         }
 
-        private Guid MapImagePath(ICollection<CityImage> cityImages)
+        private Guid MapImagePath(ICollection<Image> images)
         {
-            if (cityImages.Count == 0)
+            if (images.Count == 0)
             {
                 return Guid.Empty;
             }
-            var cityImage = cityImages.ToList().Find(i => i.Image.IsMainImage);
-            return cityImage.Image.Id;
+            var image = images.ToList().Find(i => i.IsMainImage);
+            return image.Id;
         }
     }
 }
