@@ -25,5 +25,7 @@ namespace snow_bc_api.src.Helpers
         public string OrderBy { get; set; }// = "Name";
 
         public string Fields { get; set; }
+
+        public bool Deleted { get; set; } = false;
     }
 }

@@ -15,13 +15,14 @@ namespace snow_bc_api.src.data
                 new CountryMap() as IEntityMap,
                 new ProvienceMap() as IEntityMap,
                 new CityMap() as IEntityMap,
-                new MonthMapping() as IEntityMap,
-                new CityMonthMapping() as IEntityMap,
-                new SightMapping() as IEntityMap,
-                new LocationMapping() as IEntityMap,
-                new FoodAndDrinkMapping() as IEntityMap,
-                new ImageMap() as IEntityMap
-               
+                new MonthMap() as IEntityMap,
+                new CityMonthMap() as IEntityMap,
+                new SightMap() as IEntityMap,
+                new LocationMap() as IEntityMap,
+                new FoodAndDrinkMap() as IEntityMap,
+                new ImageMap() as IEntityMap,
+                new TopicMap() as IEntityMap,
+                new CityTopicMap() as IEntityMap
             };
         }
     }

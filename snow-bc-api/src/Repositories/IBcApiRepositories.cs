@@ -11,7 +11,7 @@ namespace snow_bc_api.src.Repositories
     {
         IEnumerable<Provience> GetProviencesForCountry(Guid countryId);
         Provience GetProvienceForCountry(Guid countryId, Guid provienceId);
-        Provience AddProvienceForCountry(Guid countryId, Provience provience);
+        Task<Provience> AddProvienceForCountry(Guid countryId, Provience provience);
         IEnumerable<Country> GetCountries(IEnumerable<Guid> countryIds);
         PagedList<Country> GetCountries(CountryResourceParameters countryResourceParameters);
     }
@@ -31,5 +31,6 @@ namespace snow_bc_api.src.Repositories
     public interface IImageRepository : IEntityRepository<Image>
     {
         byte[] GetImage(Guid imageId);
+        IEnumerable<Image> GetImagesForCity(Guid cityId);
     }
 }

@@ -33,7 +33,7 @@ namespace snow_bc_api.src.Repositories
             return _context.Proviences.FirstOrDefault(p => p.CountryId == countryId && p.Id == provienceId);
         }
 
-        public Provience AddProvienceForCountry(Guid countryId, Provience provience)
+        public async Task<Provience> AddProvienceForCountry(Guid countryId, Provience provience)
         {
             var country = GetSingleAsync(countryId);
             if (country != null)
@@ -46,12 +46,13 @@ namespace snow_bc_api.src.Repositories
                     provience.CreatedDate = DateTime.UtcNow;
                 }
                 country.Result.AllProviences.Add(provience);
+                await CommitAsync();
             }
             return provience; 
         }
         public IEnumerable<Country> GetCountries(IEnumerable<Guid> countryIds)
         {
-            return _context.Countries.Where(a => countryIds.Contains(a.Id))
+            return _context.Countries.Where(a => countryIds.Contains(a.Id) && a.DeleteDate ==null)
                 .OrderBy(a => a.Name)
                 .ToList();
         }
@@ -64,6 +65,15 @@ namespace snow_bc_api.src.Repositories
             var collectionBeforePaging =
                 _context.Countries.ApplySort(countryResourceParameters.OrderBy,
                     _propertyMappingService.GetPropertyMapping<CountryApiModel, Country>());
+
+
+            if (!string.IsNullOrEmpty(countryResourceParameters.Deleted.ToString()))
+            {
+                var genreForWhereClause = countryResourceParameters.Deleted;
+                collectionBeforePaging =
+                    collectionBeforePaging.Where(a => (a.DeleteDate ==null) != genreForWhereClause);
+            }
+
 
             if (!string.IsNullOrEmpty(countryResourceParameters.Name))
             {

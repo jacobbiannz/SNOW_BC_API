@@ -7,7 +7,7 @@ using snow_bc_api.src.model;
 
 namespace snow_bc_api.src.data.modelMap
 {
-    public class CityMonthMapping :  IEntityMap
+    public class CityMonthMap :  IEntityMap
     {
         public void Map(ModelBuilder modelBuilder)
         {

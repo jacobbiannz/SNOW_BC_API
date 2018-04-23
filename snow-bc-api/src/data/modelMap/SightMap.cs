@@ -7,16 +7,13 @@ using snow_bc_api.src.model;
 
 namespace snow_bc_api.src.data.modelMap
 {
-    public class FoodAndDrinkMapping : IEntityMap
+    public class SightMap : IEntityMap
     {
         public void Map(ModelBuilder modelBuilder)
         {
-            var entity = modelBuilder.Entity<FoodAndDrink>();
+            var entity = modelBuilder.Entity<Sight>();
 
-            entity.ToTable("FoodAndDrink", "Production");
-
-            entity.HasOne(a => a.Location).WithMany(s => s.FoodAndDrinks).HasForeignKey(a => a.LocationId);
-
+            entity.ToTable("Sight", "Production");
         }
     }
 }

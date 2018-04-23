@@ -18,11 +18,12 @@ namespace snow_bc_api.API.Controllers
 
         private readonly ILogger _logger;
         private readonly IImageRepository _imageRepository;
-
-        public ImageController(IImageRepository imageRepository, ILogger<ProvienceController> logger)
+        private readonly ICityRepository _cityRepository;
+        public ImageController(ICityRepository cityRepository, IImageRepository imageRepository, ILogger<ProvienceController> logger)
         {
             _logger = logger;
             _imageRepository = imageRepository;
+            _cityRepository = cityRepository;
         }
 
         [HttpGet("{id}")]
@@ -35,6 +36,21 @@ namespace snow_bc_api.API.Controllers
 
             var imageData = _imageRepository.GetImage(id);
             return File(imageData, "image/png");
+        }
+
+        [HttpGet("city/{cityId}")]
+        public IActionResult GetImagesForCity(Guid cityId)
+        {
+            if (!_cityRepository.EntityExists(cityId))
+            {
+                return NotFound();
+            }
+
+            var imagesFromRepo = _imageRepository.GetImagesForCity(cityId);
+
+            var results = Mapper.Map<IEnumerable<ImageApiModel>>(imagesFromRepo);
+
+            return Ok(results);
         }
     }
 }

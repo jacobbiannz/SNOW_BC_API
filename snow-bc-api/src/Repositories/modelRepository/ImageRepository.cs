@@ -19,5 +19,10 @@ namespace snow_bc_api.src.Repositories.modelRepository
         {
             return _context.Images.SingleOrDefault(p => p.Id == imageId).Data;
         }
+        public IEnumerable<Image> GetImagesForCity(Guid cityId)
+        {
+            return _context.Images.Where(p => p.CityId == cityId && p.DeleteDate == null).OrderBy(i=>i.IsMainImage);
+        }
+        
     }
 }
