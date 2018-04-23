@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -16,12 +16,12 @@ namespace snow_bc_api.API.Controllers
     {
         private readonly ILogger _logger;
         private readonly IMonthRepository _monthRepository;
-        private IHostingEnvironment _env;
-        public MonthCollectionController(IHostingEnvironment env, IMonthRepository monthRepository, ILogger<MonthCollectionController> logger)
+        private readonly IImageRepository _imageRepository;
+        public MonthCollectionController(IImageRepository imageRepository, IMonthRepository monthRepository, ILogger<MonthCollectionController> logger)
         {
             _logger = logger;
             _monthRepository = monthRepository;
-            _env = env;
+            _imageRepository = imageRepository;
         }
 
         [HttpGet()]
@@ -40,6 +40,17 @@ namespace snow_bc_api.API.Controllers
                 foreach (var city in citiesFromRepo)
                 {
                     var cityApiModel = Mapper.Map<CityApiModel>(city);
+
+                    
+                    var imagesFromRepo = _imageRepository.GetImagesForCity(city.Id);
+
+                    foreach (var image in imagesFromRepo)
+                    {
+                        var imageApiModel = Mapper.Map<ImageApiModel>(image);
+
+                        cityApiModel.Images.Add(imageApiModel);
+                    } 
+
                     monthApiModel.TopCities.Add(cityApiModel);
                 } 
             }
