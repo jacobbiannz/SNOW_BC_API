@@ -9,5 +9,6 @@ namespace snow_bc_api.API.ApiModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public bool IsMainImage { get; set; }
     }
 }

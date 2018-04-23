@@ -23,5 +23,7 @@ namespace snow_bc_api.src.model
         public virtual ICollection<CityMonth> BestMonths { get; set; } = new List<CityMonth>();
 
         public virtual ICollection<Location> Locations { get; set; } = new List<Location>();
+
+        public virtual ICollection<CityTopic> CityTopics { get; set; } = new List<CityTopic>();
     }
 }

@@ -401,6 +401,48 @@ namespace snow_bc_api.src.data
             };
             context.Images.AddRange(zhejiangImages);
 
+
+          
+
+            var topics = new Topic[]
+            {
+
+                new Topic {Name = "visa waived"},
+                new Topic {Name = "culture"},
+                new Topic {Name = "scenery"},
+                new Topic {Name = "diving"},
+                new Topic {Name = "hot spring"},
+                new Topic {Name = "animal"},
+                new Topic {Name = "shopping"},
+                new Topic {Name = "food"},
+                new Topic {Name = "rafting"}
+            };
+
+
+            context.Topics.AddRange(topics);
+
+
+            var cityTopics = new List<CityTopic>();
+
+            foreach (var topic in topics)
+            {
+                foreach (var city in cities)
+                {
+                    cityTopics.Add(
+                        
+                        new CityTopic()
+                        {
+                            City = city,
+                            Topic = topic
+                        }
+                        
+                     );
+                }
+            }
+
+
+            context.CityTopics.AddRange(cityTopics);
+
             context.SaveChanges();
 
         }
