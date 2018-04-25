@@ -41,15 +41,7 @@ namespace snow_bc_api.API.Controllers
                 {
                     var cityApiModel = Mapper.Map<CityApiModel>(city);
 
-                    
-                    var imagesFromRepo = _imageRepository.GetImagesForCity(city.Id);
-
-                    foreach (var image in imagesFromRepo)
-                    {
-                        var imageApiModel = Mapper.Map<ImageApiModel>(image);
-
-                        cityApiModel.Images.Add(imageApiModel);
-                    } 
+                    cityApiModel.MainImageId = _imageRepository.GetMainImageIdForCity(city.Id);
 
                     monthApiModel.TopCities.Add(cityApiModel);
                 } 

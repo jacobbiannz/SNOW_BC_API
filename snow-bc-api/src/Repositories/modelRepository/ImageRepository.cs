@@ -23,6 +23,15 @@ namespace snow_bc_api.src.Repositories.modelRepository
         {
             return _context.Images.Where(p => p.CityId == cityId && p.DeleteDate == null).OrderBy(i=>i.IsMainImage);
         }
-        
+
+        public string GetMainImageIdForCity(Guid cityId)
+        {
+            var image = _context.Images.Where(p => p.CityId == cityId && p.DeleteDate == null && p.IsMainImage).SingleOrDefault();
+
+            if (image == null) return Guid.Empty.ToString();
+            return image.Id.ToString();
+        }
+
+
     }
 }
