@@ -32,5 +32,6 @@ namespace snow_bc_api.src.Repositories
     {
         byte[] GetImage(Guid imageId);
         IEnumerable<Image> GetImagesForCity(Guid cityId);
+        string GetMainImageIdForCity(Guid cityId);
     }
 }
