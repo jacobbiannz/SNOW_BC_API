@@ -154,6 +154,51 @@ namespace snow_bc_api.API.Controllers
             return NoContent();
         }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdateCountry(Guid id, [FromBody] CountryApiModelForUpdate country)
+        {
+            if (country == null)
+            {
+                return BadRequest();
+            }
+
+            if (country.Name.Length == 1)
+            {
+                ModelState.AddModelError(nameof(CountryApiModelForUpdate), "The provided name should have more than once character.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
+
+            var countryFromRepo = _countryRepository.GetSingleAsync(id).Result;
+
+            if (countryFromRepo == null)
+            {
+                var countryToAdd = Mapper.Map<Country>(country);
+                countryToAdd.Id = id;
+                if (_countryRepository.AddAsync(countryToAdd) == null)
+                {
+                    throw new Exception($"Upserting country {id} failed on save.");
+                }
+                var countryToReturn = Mapper.Map<CountryApiModel>(countryToAdd);
+
+                return CreatedAtRoute("GetCountry", new { id = countryToReturn.Id },
+                    countryToReturn);
+            }
+
+            Mapper.Map(country, countryFromRepo);
+
+            if (_countryRepository.UpdateAsync(countryFromRepo).Result == null)
+            {
+                throw new Exception($"Updating country {id} failed on save.");
+            }
+
+            return NoContent();
+        }
+
+
         [HttpOptions]
         public IActionResult GetCountriesOptions()
         {
