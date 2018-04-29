@@ -13,7 +13,8 @@
 		"7dafd29c-11c6-49ed-ae1a-bd9fb7bb2e19",
 		"8c88ac46-bac9-47ee-8ddc-0980e7cdebd7",
 		"c61da446-1717-c3cf-e206-524797859e42",
-		"b43dc1de-77b1-af33-cb21-ff334c7414a6"
+		"b43dc1de-77b1-af33-cb21-ff334c7414a6",
+		"ff4e3eca-b179-8b56-cdb6-f044f67794f6"
 	],
 	"folders": [],
 	"timestamp": 0,
@@ -360,6 +361,27 @@
 			"pathVariableData": [],
 			"collectionId": "80b5bca7-5eae-46f7-8b4a-92de182e4818",
 			"rawModeData": "{\n  \"name\":\"GanSu\"\n}"
+		},
+		{
+			"id": "ff4e3eca-b179-8b56-cdb6-f044f67794f6",
+			"headers": "Content-Type: application/json\nAccept: application/json\n",
+			"url": "http://localhost:61125/api/countries/9F016938-2E2B-4017-1F26-08D5A519C95b",
+			"pathVariables": {},
+			"preRequestScript": null,
+			"method": "PUT",
+			"collectionId": "80b5bca7-5eae-46f7-8b4a-92de182e4818",
+			"data": [],
+			"dataMode": "raw",
+			"name": "http://localhost:61125/api/countries/9F016938-2E2B-4017-1F26-08D5A519C95b",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1524998697371,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\n  \"name\":\"bbb-Updated\"\n}"
 		}
 	]
 }
