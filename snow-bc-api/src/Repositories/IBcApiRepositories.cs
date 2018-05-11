@@ -18,6 +18,8 @@ namespace snow_bc_api.src.Repositories
     public interface IProvienceRepository : IEntityRepository<Provience> {
 
         IEnumerable<City> GetCitiesForProvience(Guid provienceId);
+        Task<City> AddCityForProvience(Guid provienceId, City city);
+        City GetCityForProvience(Guid provienceId, Guid cityId);
     }
     public interface ICityRepository : IEntityRepository<City> { }
 

@@ -50,6 +50,7 @@ namespace snow_bc_api.src.Repositories
             }
             return provience; 
         }
+
         public IEnumerable<Country> GetCountries(IEnumerable<Guid> countryIds)
         {
             return _context.Countries.Where(a => countryIds.Contains(a.Id) && a.DeleteDate ==null)

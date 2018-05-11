@@ -11,6 +11,7 @@ using AutoMapper;
 using snow_bc_api.API.ApiModel;
 using snow_bc_api.API.Core;
 using snow_bc_api.src.model;
+using snow_bc_api.src.Helpers;
 
 namespace snow_bc_api.API.Controllers
 {
@@ -63,23 +64,123 @@ namespace snow_bc_api.API.Controllers
             return Ok(results);
         }
 
-        // GET: api/City/5
-        [HttpGet("{id}")]
-        public string GetCity(int cityId, bool includeProvience)
+
+        // GET: api/abc/5
+        [HttpGet("{cityId}", Name = "GetCityForProvience")]
+        public IActionResult GetCityForProvience(Guid provienceId, Guid cityId)
         {
-            return "value";
+            if (!_provienceRepository.EntityExists(provienceId))
+            {
+                return NotFound();
+            }
+
+            var cityForProvienceFromRepo = _provienceRepository.GetCityForProvience(provienceId, cityId);
+
+            var results = Mapper.Map<CityApiModel>(cityForProvienceFromRepo);
+
+            return Ok(results);
         }
+
 
         // POST: api/City
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult CreateCityForProvience(Guid countryId, Guid provienceId, [FromBody]CityApiModelForCreation city)
         {
+            if (city == null)
+            {
+                return BadRequest();
+            }
+
+            if (city.Name.Length == 1)
+            {
+                ModelState.AddModelError(nameof(CityApiModelForCreation), "The provided name should have more than once character.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                //return 422
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
+
+            if (!_countryRepository.EntityExists(countryId))
+            {
+                return NotFound();
+            }
+
+            if (!_provienceRepository.EntityExists(provienceId))
+            {
+                return NotFound();
+            }
+
+
+            var cityEntity = Mapper.Map<City>(city);
+
+
+            if (_provienceRepository.AddCityForProvience(provienceId, cityEntity) == null)
+            {
+                throw new Exception($"Creating a city for provience {provienceId} failed on save.");
+            }
+
+            var cityForReturn = Mapper.Map<CityApiModel>(cityEntity);
+
+            return CreatedAtRoute("GetCityForProvience",
+                new { provienceId = provienceId, cityId = cityForReturn.Id }, cityForReturn);
         }
 
         // PUT: api/City/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult UpdateCityForProvience(Guid countryId, Guid provienceId, Guid id, [FromBody] CityApiModelForUpdate city)
         {
+            if (city == null)
+            {
+                return BadRequest();
+            }
+
+            if (city.Name.Length == 1)
+            {
+                ModelState.AddModelError(nameof(CityApiModelForUpdate), "The provided name should have more than once character.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
+
+            if (!_countryRepository.EntityExists(countryId))
+            {
+                return NotFound();
+            }
+
+            if (!_provienceRepository.EntityExists(provienceId))
+            {
+                return NotFound();
+            }
+
+
+            var cityFromRepo = _cityRepository.GetSingleAsync(id);
+
+            if (cityFromRepo.Result == null)
+            {
+                var cityToAdd = Mapper.Map<City>(city);
+                cityToAdd.Id = id;
+                if (_provienceRepository.AddCityForProvience(provienceId, cityToAdd) == null)
+                {
+                    throw new Exception($"Upserting city {id} for provience {provienceId} failed on save.");
+                }
+                var cityToReturn = Mapper.Map<CityApiModel>(cityToAdd);
+
+                return CreatedAtRoute("GetCityForProvience", new { provienceId = provienceId, id = cityToReturn.Id },
+                    cityToReturn);
+            }
+
+            Mapper.Map(city, cityFromRepo.Result);
+
+            if (_cityRepository.UpdateAsync(cityFromRepo.Result).Result == null)
+            {
+                throw new Exception($"Updating city {id} for provience {provienceId} failed on save.");
+            }
+
+            return NoContent();
         }
 
         // DELETE: api/ApiWithActions/5

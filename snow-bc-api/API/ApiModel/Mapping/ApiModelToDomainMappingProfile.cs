@@ -16,23 +16,23 @@ namespace snow_bc_api.API.ApiModel.Mapping
     protected ApiModelToDomainMappingProfile(string profileName)
     : base(profileName)
     {
-        CreateMap<CountryApiModelForCreation, Country>();
+            CreateMap<CountryApiModelForCreation, Country>();
       //   .ForMember(m => m.Name,
       //        map => map.MapFrom(am => am.Name))
       //   .ForMember(am => am.AllProviences,
       //          map => map.MapFrom(s => s.Proviences));
 
-        CreateMap<CountryApiModel, Country>();
+            CreateMap<CountryApiModel, Country>();
       //      .ForMember(m => m.Name,
       //          map => map.MapFrom(am => am.Name))
       //      .ForMember(am => am.AllProviences,
        //         map => map.MapFrom(s => s.Proviences));
 
-        CreateMap<ProvienceApiModelForCreation, Provience>();
+            CreateMap<ProvienceApiModelForCreation, Provience>();
        //      .ForMember(m => m.Name,
        //      map => map.MapFrom(am => am.Name));
 
-        CreateMap<ProvienceApiModel, Provience>();
+            CreateMap<ProvienceApiModel, Provience>();
 
         //     .ForMember(m => m.Name,
         //        map => map.MapFrom(am => am.Name));
@@ -50,10 +50,13 @@ namespace snow_bc_api.API.ApiModel.Mapping
                 .ForMember(m => m.Company,
                      map => map.MapFrom(vm => vm.Company));
         */
-        CreateMap<ProvienceApiModelForUpdate, Provience>();
+            CreateMap<ProvienceApiModelForUpdate, Provience>();
 
+            CreateMap<CityApiModelForCreation, City>();
 
-        CreateMap<CountryApiModelForUpdate, Country>();
+            CreateMap<CityApiModelForUpdate, City>();
+
+            CreateMap<CountryApiModelForUpdate, Country>();
         }
 }
 }

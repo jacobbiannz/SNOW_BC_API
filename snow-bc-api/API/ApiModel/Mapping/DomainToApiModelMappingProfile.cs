@@ -56,7 +56,11 @@ namespace snow_bc_api.API.ApiModel.Mapping
                 .ForMember(am => am.MainImageId,
                      s => s.ResolveUsing(src => MapImagePath(src.Images)));
 
+            CreateMap<City, CityApiModelForCreation>();
+
             CreateMap<City, CityWithImagesApiModel>();
+
+            CreateMap<City, CityApiModelForUpdate>();
             /*
             CreateMap<Category, CategoryViewModel>()
              .ForMember(vm => vm.Name,
