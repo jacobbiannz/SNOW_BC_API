@@ -22,5 +22,27 @@ namespace snow_bc_api.src.Repositories
         }
 
 
+        public City GetCityForProvience(Guid provienceId, Guid cityId)
+        {
+            return _context.Cities.FirstOrDefault(p => p.ProvienceId == provienceId && p.Id == cityId);
+        }
+
+        public async Task<City> AddCityForProvience(Guid procienceId, City City)
+        {
+            var provience = GetSingleAsync(procienceId);
+            if (provience != null)
+            {
+                // if there isn't an id filled out (ie: we're not upserting),
+                // we should generate one
+                if (City.Id == Guid.Empty)
+                {
+                    City.Id = Guid.NewGuid();
+                    City.CreatedDate = DateTime.UtcNow;
+                }
+                provience.Result.AllCities.Add(City);
+                await CommitAsync();
+            }
+            return City;
+        }
     }
 }
