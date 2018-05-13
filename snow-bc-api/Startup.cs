@@ -77,7 +77,7 @@ namespace snow_bc_api
             services.AddTransient<IPropertyMappingService, PropertyMappingService>();
             services.AddTransient<ITypeHelperService, TypeHelperService>();
 
-            services.AddResponseCaching();
+            //services.AddResponseCaching();
 
             services.AddHttpCacheHeaders(
                 (expirationModelOptions)
@@ -110,7 +110,33 @@ namespace snow_bc_api
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
+                // Add MVC to the request pipeline.
+                app.UseCors(builder =>
+                    builder.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+
+                app.UseExceptionHandler(appBuilder =>
+                {
+                    appBuilder.Run(async cont =>
+                    {
+                        cont.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                        //cont.Response.Headers.Add("Access-Control-Allow-Methods", "POST, GET, PUT,  DELETE, OPTIONS");
+                        //cont.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Accept");
+
+                        var exceptionHandlerFeature = cont.Features.Get<IExceptionHandlerFeature>();
+                        if (exceptionHandlerFeature != null)
+                        {
+                            var logger = loggerFactory.CreateLogger("Global exception logger");
+
+                            logger.LogError(500, exceptionHandlerFeature.Error, exceptionHandlerFeature.Error.Message);
+                        }
+                        cont.Response.StatusCode = 500;
+                        await cont.Response.WriteAsync("An unexpected fault happened. Try again later.");
+                    });
+                });
+
             }
             else
             {
@@ -118,7 +144,7 @@ namespace snow_bc_api
                 {
                     appBuilder.Run(async cont =>
                     {
-                       var exceptionHandlerFeature = cont.Features.Get<IExceptionHandlerFeature>();
+                        var exceptionHandlerFeature = cont.Features.Get<IExceptionHandlerFeature>();
                         if (exceptionHandlerFeature != null)
                         {
                             var logger = loggerFactory.CreateLogger("Global exception logger");
@@ -131,9 +157,9 @@ namespace snow_bc_api
                 });
             }
 
-            app.UseResponseCaching();
+            //app.UseResponseCaching();
 
-            app.UseHttpCacheHeaders();
+            //app.UseHttpCacheHeaders();
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>

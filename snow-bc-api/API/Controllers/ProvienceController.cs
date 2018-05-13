@@ -199,7 +199,8 @@ namespace snow_bc_api.API.Controllers
                 throw new Exception($"Updating provience {id} for country {countryId} failed on save.");
             }
 
-            return NoContent();
+            return CreatedAtRoute("GetProvienceForCountry", new { countryId = countryId, provienceId = id }, provienceFromRepo);
+            //return NoContent();
         }
 
         [HttpPatch("{id}")]

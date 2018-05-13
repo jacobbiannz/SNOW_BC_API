@@ -180,7 +180,9 @@ namespace snow_bc_api.API.Controllers
                 throw new Exception($"Updating city {id} for provience {provienceId} failed on save.");
             }
 
-            return NoContent();
+            return CreatedAtRoute("GetCityForProvience",
+               new { provienceId = provienceId, cityId = id }, cityFromRepo.Result);
+            //return NoContent();
         }
 
         // DELETE: api/ApiWithActions/5

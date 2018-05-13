@@ -155,8 +155,10 @@ namespace snow_bc_api.API.Controllers
         }
 
         [HttpPut("{id}")]
+       
         public IActionResult UpdateCountry(Guid id, [FromBody] CountryApiModelForUpdate country)
         {
+
             if (country == null)
             {
                 return BadRequest();
@@ -195,7 +197,9 @@ namespace snow_bc_api.API.Controllers
                 throw new Exception($"Updating country {id} failed on save.");
             }
 
-            return NoContent();
+            //return NoContent();
+            //return new NoContentResult();
+            return CreatedAtRoute("GetCountry", new { id = countryFromRepo.Id }, countryFromRepo);
         }
 
 
