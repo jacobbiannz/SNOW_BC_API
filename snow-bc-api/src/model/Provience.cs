@@ -21,5 +21,6 @@ namespace snow_bc_api.src.model
 
         public virtual ICollection<City> AllCities { get; set; } = new List<City>();
 
+        public virtual ICollection<ProvienceAttraction> Attractions { get; set; } = new List<ProvienceAttraction>();
     }
 }

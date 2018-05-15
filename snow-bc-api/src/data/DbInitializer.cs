@@ -443,6 +443,35 @@ namespace snow_bc_api.src.data
 
             context.CityTopics.AddRange(cityTopics);
 
+
+
+            var attractions = new CityAttraction[]
+           {
+
+                new CityAttraction {Name = "museum"},
+                new CityAttraction {Name = "park"},
+                new CityAttraction {Name = "zoo"},
+                new CityAttraction {Name = "diving"},
+                new CityAttraction {Name = "hot spring"},
+                new CityAttraction {Name = "animal"},
+                new CityAttraction {Name = "shopping"},
+                new CityAttraction {Name = "food"},
+                new CityAttraction {Name = "rafting"}
+           };
+
+            context.CityAttractions.AddRange(attractions);
+
+            foreach (var city in cities)
+            {
+                if (city.Name == "Haikou")
+                {
+                    foreach (var attraction in attractions)
+                    {
+                        attraction.City = city;
+                    }
+                }
+            }
+
             context.SaveChanges();
 
         }

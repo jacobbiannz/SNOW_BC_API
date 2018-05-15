@@ -63,6 +63,9 @@ namespace snow_bc_api
             services.AddScoped<IProvienceRepository, ProvienceRepository>();
             services.AddScoped<IMonthRepository, MonthRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<ICityAttractionRepository, CityAttractionRepository>();
+            services.AddScoped<ICountryAttractionRepository, CountryAttractionRepository>();
+            services.AddScoped<IProvienceAttractionRepository, ProvienceAttractionRepository>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
