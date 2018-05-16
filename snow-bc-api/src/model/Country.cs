@@ -11,7 +11,9 @@ namespace snow_bc_api.src.model
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
+
         public virtual ICollection<Provience> AllProviences { get; set; } = new List<Provience>();
 
+        public virtual ICollection<CountryAttraction> Attractions { get; set; } = new List<CountryAttraction>();
     }
 }

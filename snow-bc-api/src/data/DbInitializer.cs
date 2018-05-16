@@ -443,6 +443,37 @@ namespace snow_bc_api.src.data
 
             context.CityTopics.AddRange(cityTopics);
 
+
+
+            var attractions = new Attraction[]
+           {
+
+                new Attraction {Name = "museum"},
+                new Attraction {Name = "park"},
+                new Attraction {Name = "zoo"},
+                new Attraction {Name = "diving"},
+                new Attraction {Name = "hot spring"},
+                new Attraction {Name = "animal"},
+                new Attraction {Name = "shopping"},
+                new Attraction {Name = "food"},
+                new Attraction {Name = "rafting"}
+           };
+
+            context.Attractions.AddRange(attractions);
+
+            foreach (var attraction in attractions)
+            {
+                foreach (var city in cities)
+                {
+                  context.CityAttractions.Add(  new CityAttraction()
+                    {
+                        City = city,
+                        Attraction = attraction
+                    });
+                }
+            }
+           
+
             context.SaveChanges();
 
         }

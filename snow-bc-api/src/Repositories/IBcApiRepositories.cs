@@ -36,4 +36,11 @@ namespace snow_bc_api.src.Repositories
         IEnumerable<Image> GetImagesForCity(Guid cityId);
         string GetMainImageIdForCity(Guid cityId);
     }
+
+
+    public interface IAttractionRepository : IEntityRepository<Attraction>
+    {
+        IEnumerable<Attraction> GetAttractionsForCity(Guid cityId);
+    }
+
 }
