@@ -81,7 +81,7 @@ namespace snow_bc_api.API.ApiModel.Mapping
 
             CreateMap<Image, ImageApiModel>();
 
-           
+            CreateMap<CityAttraction, AttractionApiModel>();
         }
 
       

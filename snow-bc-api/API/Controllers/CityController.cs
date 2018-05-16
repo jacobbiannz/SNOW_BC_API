@@ -26,17 +26,23 @@ namespace snow_bc_api.API.Controllers
         private readonly IProvienceRepository _provienceRepository;
         private readonly ICityRepository _cityRepository;
         private readonly IImageRepository _imageRepository;
-
+        private readonly IAttractionRepository _attractionRepository;
 
         private readonly ILogger _logger;
 
-        public CityController(ICountryRepository countryRepository, IProvienceRepository provienceRepository, ICityRepository cityRepository, IImageRepository imageRepository, ILogger<ProvienceController> logger)
+        public CityController(ICountryRepository countryRepository,
+                                IProvienceRepository provienceRepository, 
+                                ICityRepository cityRepository, 
+                                IImageRepository imageRepository,
+                                IAttractionRepository attractionRepository,
+                                ILogger<ProvienceController> logger)
         {
             _logger = logger;
             _countryRepository = countryRepository;
             _provienceRepository = provienceRepository;
             _cityRepository = cityRepository;
             _imageRepository = imageRepository;
+            _attractionRepository = attractionRepository;
         }
 
         // GET: api/City
@@ -60,7 +66,18 @@ namespace snow_bc_api.API.Controllers
             foreach (var cityApiModel in results)
             {
                 cityApiModel.MainImageId = _imageRepository.GetMainImageIdForCity(cityApiModel.Id);
+
+               var attractionsFromRepo = _attractionRepository.GetAttractionsForCity(cityApiModel.Id);
+
+               var attractionsAPIModel = Mapper.Map<IEnumerable<AttractionApiModel>>(attractionsFromRepo);
+
+               foreach (var cityAttractionAPIModel in attractionsAPIModel)
+                {
+                    cityApiModel.Attractions.Add(cityAttractionAPIModel);
+                }
             }
+
+
             return Ok(results);
         }
 

@@ -38,18 +38,9 @@ namespace snow_bc_api.src.Repositories
     }
 
 
-    public interface ICityAttractionRepository : IEntityRepository<CityAttraction>
+    public interface IAttractionRepository : IEntityRepository<Attraction>
     {
-       
+        IEnumerable<Attraction> GetAttractionsForCity(Guid cityId);
     }
 
-    public interface IProvienceAttractionRepository : IEntityRepository<ProvienceAttraction>
-    {
-
-    }
-
-    public interface ICountryAttractionRepository : IEntityRepository<CountryAttraction>
-    {
-
-    }
 }

@@ -27,6 +27,8 @@ namespace snow_bc_api.src.data
         public DbSet<CountryAttraction> CountryAttractions { get; set; }
         public DbSet<ProvienceAttraction> ProvienceAttractions { get; set; }
 
+        public DbSet<Attraction> Attractions { get; set; }
+
         public String ConnectionString { get; }
         public IEntityMapper EntityMapper { get; }
      

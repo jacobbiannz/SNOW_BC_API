@@ -25,7 +25,8 @@ namespace snow_bc_api.src.data
                 new CityTopicMap() as IEntityMap,
                 new CityAttractionMap() as IEntityMap,
                 new ProvienceAttractionMap() as IEntityMap,
-                new CountryAttractionMap() as IEntityMap
+                new CountryAttractionMap() as IEntityMap,
+                new AttractionMap() as IEntityMap
             };
         }
     }

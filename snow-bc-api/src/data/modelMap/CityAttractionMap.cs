@@ -16,6 +16,8 @@ namespace snow_bc_api.src.data.modelMap
             entity.ToTable("CityAttraction", "Production");
 
             entity.HasOne(a => a.City).WithMany(s => s.Attractions).HasForeignKey(a => a.CityId).IsRequired();
+
+            entity.HasOne(a => a.Attraction).WithMany(s => s.Cities).HasForeignKey(a => a.AttractionId).IsRequired();
         }
     }
 }

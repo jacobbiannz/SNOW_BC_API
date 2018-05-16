@@ -445,32 +445,34 @@ namespace snow_bc_api.src.data
 
 
 
-            var attractions = new CityAttraction[]
+            var attractions = new Attraction[]
            {
 
-                new CityAttraction {Name = "museum"},
-                new CityAttraction {Name = "park"},
-                new CityAttraction {Name = "zoo"},
-                new CityAttraction {Name = "diving"},
-                new CityAttraction {Name = "hot spring"},
-                new CityAttraction {Name = "animal"},
-                new CityAttraction {Name = "shopping"},
-                new CityAttraction {Name = "food"},
-                new CityAttraction {Name = "rafting"}
+                new Attraction {Name = "museum"},
+                new Attraction {Name = "park"},
+                new Attraction {Name = "zoo"},
+                new Attraction {Name = "diving"},
+                new Attraction {Name = "hot spring"},
+                new Attraction {Name = "animal"},
+                new Attraction {Name = "shopping"},
+                new Attraction {Name = "food"},
+                new Attraction {Name = "rafting"}
            };
 
-            context.CityAttractions.AddRange(attractions);
+            context.Attractions.AddRange(attractions);
 
-            foreach (var city in cities)
+            foreach (var attraction in attractions)
             {
-                if (city.Name == "Haikou")
+                foreach (var city in cities)
                 {
-                    foreach (var attraction in attractions)
+                  context.CityAttractions.Add(  new CityAttraction()
                     {
-                        attraction.City = city;
-                    }
+                        City = city,
+                        Attraction = attraction
+                    });
                 }
             }
+           
 
             context.SaveChanges();
 
