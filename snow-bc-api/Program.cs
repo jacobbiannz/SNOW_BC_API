@@ -21,7 +21,7 @@ namespace snow_bc_api
             var logger = LogManager.LoadConfiguration("nlog.config").GetCurrentClassLogger();
             try
             {
-                var host = BuildWebHost(args);
+                var host = CreateWebHostBuilder(args).Build();
                 using (var scope = host.Services.CreateScope())
                 {
                     // Retrieve your DbContext isntance here
@@ -40,15 +40,21 @@ namespace snow_bc_api
             }
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                 .ConfigureLogging(logging =>
-                 {
-                     logging.ClearProviders();
-                     logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-                 })
-                .UseNLog()
-                .Build();
+            .UseStartup<Startup>()
+            .ConfigureLogging(logging => {
+                logging.ClearProviders();
+                logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+            })
+            .UseNLog();
+               // .UseStartup<Startup>()
+               //  .ConfigureLogging(logging =>
+              //   {
+           //          logging.ClearProviders();
+           //          logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+           //      })
+           //     .UseNLog()
+           //     .Build();
     }
 }

@@ -116,7 +116,7 @@ namespace snow_bc_api.API.Controllers
             if (!ModelState.IsValid)
             {
                 //return 422
-                return new UnprocessableEntityObjectResult(ModelState);
+                return new Microsoft.AspNetCore.Mvc.UnprocessableEntityObjectResult(ModelState);
             }
 
             if (!_countryRepository.EntityExists(countryId))
@@ -160,7 +160,7 @@ namespace snow_bc_api.API.Controllers
 
             if (!ModelState.IsValid)
             {
-                return new UnprocessableEntityObjectResult(ModelState);
+                return new Microsoft.AspNetCore.Mvc.UnprocessableEntityObjectResult(ModelState);
             }
 
             if (!_countryRepository.EntityExists(countryId))
