@@ -34,7 +34,7 @@ namespace snow_bc_api
             services.AddMvc(setupAction =>
             {
                 setupAction.ReturnHttpNotAcceptable = true;
-                setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
+                setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter(setupAction));
                 setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
             })
            .AddJsonOptions(a => a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver())

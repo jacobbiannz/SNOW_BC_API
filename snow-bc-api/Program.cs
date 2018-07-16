@@ -48,13 +48,5 @@ namespace snow_bc_api
                 logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
             })
             .UseNLog();
-               // .UseStartup<Startup>()
-               //  .ConfigureLogging(logging =>
-              //   {
-           //          logging.ClearProviders();
-           //          logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-           //      })
-           //     .UseNLog()
-           //     .Build();
     }
 }

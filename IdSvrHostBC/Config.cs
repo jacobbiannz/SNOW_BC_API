@@ -54,7 +54,7 @@ namespace IdSvrHostBC
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowedScopes = new List<string> { "openid", "profile", "api1", "email"},
                     RedirectUris = new List<string> { "http://localhost:61155/auth-callback" },
-                    PostLogoutRedirectUris = new List<string> { "http://localhost:61155/index.html" },
+                    PostLogoutRedirectUris = new List<string> { "http://localhost:61155/home.html" },
                     AllowedCorsOrigins = new List<string> { "http://localhost:61155" },
                     AllowAccessTokensViaBrowser = true
                 }
