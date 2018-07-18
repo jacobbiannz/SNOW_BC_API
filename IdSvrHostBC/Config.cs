@@ -12,7 +12,7 @@ namespace IdSvrHostBC
         {
             return new List<ApiResource>
             {
-                 new ApiResource("api1", "My API")
+                 new ApiResource("api1", "My API"),
             };
         }
 
@@ -33,14 +33,14 @@ namespace IdSvrHostBC
                 new Client
                 {
                     ClientId = "client",
-
+                     ClientName = "Client Credentials Client",
                     // no interactive user, use the clientid/secret for authentication
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     RequireConsent = false,
                     // secret for authentication
                     ClientSecrets =
                     {
-                        new Secret("secret".Sha256())
+                        new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256())
                     },
 
                     // scopes that client has access to
