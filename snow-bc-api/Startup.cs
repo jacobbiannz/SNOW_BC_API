@@ -1,31 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System.Net;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Mvc;
 using snow_bc_api.src.data;
 using snow_bc_api.src.Repositories;
 using snow_bc_api.API.ApiModel.Mapping;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using NLog.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using snow_bc_api.src.Repositories.modelRepository;
-using snow_bc_api.src.Helpers;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace snow_bc_api
 {
@@ -44,7 +34,7 @@ namespace snow_bc_api
             services.AddMvc(setupAction =>
             {
                 setupAction.ReturnHttpNotAcceptable = true;
-                setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
+                setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter(setupAction));
                 setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
             })
            .AddJsonOptions(a => a.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver())

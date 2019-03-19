@@ -171,7 +171,7 @@ namespace snow_bc_api.API.Controllers
 
             if (!ModelState.IsValid)
             {
-                return new UnprocessableEntityObjectResult(ModelState);
+                return new Microsoft.AspNetCore.Mvc.UnprocessableEntityObjectResult(ModelState);
             }
 
             var countryFromRepo = _countryRepository.GetSingleAsync(id).Result;

@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "snow_bc_api", "snow-bc-api\snow_bc_api.csproj", "{C9F6A1E7-6359-4EEA-82CF-A9B9FE05A268}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdSvrHostBC", "IdSvrHostBC\IdSvrHostBC.csproj", "{05D10E27-C829-408D-B69E-F2A806F75303}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{C9F6A1E7-6359-4EEA-82CF-A9B9FE05A268}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9F6A1E7-6359-4EEA-82CF-A9B9FE05A268}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9F6A1E7-6359-4EEA-82CF-A9B9FE05A268}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05D10E27-C829-408D-B69E-F2A806F75303}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05D10E27-C829-408D-B69E-F2A806F75303}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05D10E27-C829-408D-B69E-F2A806F75303}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05D10E27-C829-408D-B69E-F2A806F75303}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
